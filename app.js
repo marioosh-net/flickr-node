@@ -5,7 +5,7 @@
 
 var express = require('express');
 var routes = require('./routes');
-var photosets = require('./routes/photosets');
+// var photosets = require('./routes/photosets');
 var photos = require('./routes/photos');
 var exif = require('./routes/exif');
 var http = require('http');
@@ -50,7 +50,7 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/photosets', photosets.list)
+// app.get('/photosets', photosets.list)
 app.get('/album/:id', photos.list)
 app.get('/exif/:id/:secret', exif.list)
 
