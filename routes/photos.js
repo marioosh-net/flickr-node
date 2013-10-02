@@ -47,7 +47,8 @@ exports.list = function(req, res){
     			}
     			var cover = {
     					id: p.id,
-    					title: p.title, 
+    					title: p.title,
+    					secret: p.secret,
     					src: src
     			};
     			callback(null, cover);

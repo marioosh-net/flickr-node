@@ -31,7 +31,7 @@ var photosEventHandlers = function(t){
 		$('#exif-container').css('height', '200px');
 	}
     $('.showexif').mouseover(function(){
-    	exif($(this).attr('si'), $(this).attr('ai'), $(this).attr('pi'), $(this).attr('ps'));	
+    	exif($(this).attr('pi'), $(this).attr('ps'));	
     });		
     $('.page').click(function(){
     	loadingIcon(this); 
@@ -123,7 +123,7 @@ function exif(id) {
 	});
 }
 
-function exif(index, albumid, photoid, secret) {
+function exif(photoid, secret) {
 	loading('#exif');
 	xhr = $.ajax({
 		beforeSend: function() {
@@ -131,7 +131,7 @@ function exif(index, albumid, photoid, secret) {
 	            xhr.abort();
 	        }		
 		},		
-		url: '/exif/'+index+'/'+albumid+'/'+photoid+'/'+secret
+		url: '/exif/'+photoid+'/'+secret
 	}).done(function(data){
 		/*$('#debug').show();
 		$('#debug').html(data);*/
