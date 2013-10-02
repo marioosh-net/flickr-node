@@ -15,9 +15,14 @@ exports.list = function(req, res){
     	var ps = json.photosets.photoset;
     	
     	async.concat(ps, function(p, callback){
+    		console.log(p.id+'DUPA');
     		request(base_url+'&user_id='+flickr.user_id+'&method=flickr.photos.getSizes&photo_id='+p.primary, function (error, response, body1){
     			var json1 = JSON.parse(body1);
-    			var cover = {title: p.title._content, thumb: json1.sizes.size[1].source};
+    			var cover = {
+    					id: p.id,
+    					title: p.title._content, 
+    					thumb: json1.sizes.size[1].source
+    			};
     			callback(null, cover);
     		});    		
     	}, 

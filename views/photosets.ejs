@@ -1,5 +1,9 @@
-<ul>
 <% for(var i=0; i<covers.length; i++) {%>
-   <li><img src="<%= covers[i].thumb %>" alt="<%= covers[i].title %>"/></li>
+    <div class="thumb_box pub" title="<%= covers[i].title %>">
+        <a href="#" url='/album/<%= covers[i].id %>' selector='#uu<%= i %>' class="openalbum thumb_link">
+            <div id="t<%= i %>" class="thumb" style="background-image: url('/images/ajax-loader7.gif'); background-position: 50% 50%; "></div>
+            <div id="u<%= i %>" class="thumb thumb_box_cover" style="display: none; float: none; background-image: url('<%= covers[i].thumb %>');"></div>
+            <img style="display: none;" src="<%= covers[i].thumb %>" onload="$('#t<%= i %>').hide(); $('#u<%= i %>').show();">
+        </a>
+    </div>
 <% } %>
-</ul>
