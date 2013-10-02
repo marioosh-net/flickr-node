@@ -27,7 +27,6 @@ exports.index = function(req, res){
     		});    		
     	}, 
     	function(err, covers){
-          	console.log(covers);
            	res.render('index', {covers: covers});    		
     	});
     });	
