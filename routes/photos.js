@@ -1,8 +1,9 @@
-
-/*
- * GET albums listing.
+/**
+ * list photos in photoset
+ * 
+ * flickr.photosets.getPhotos
+ * flickr.photos.getSizes
  */
-
 var async = require('async');
 var request = require('request');
 
@@ -10,15 +11,13 @@ exports.list = function(req, res){
 	var photoset_id = req.params.id;
 	
     var flickr = req.app.get('flickr');
-    var base_url = req.app.get('flickr_api_base_url');
 
-    request(base_url+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos', function (error, response, body) {
+    request(req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos', function (error, response, body) {
     	var json = JSON.parse(body);
     	var photos = json.photoset.photo;
-    	console.log(JSON.stringify(photos));
     	
     	async.concat(photos, function(p, callback){
-    		request(base_url+'&user_id='+flickr.user_id+'&method=flickr.photos.getSizes&photo_id='+p.id, function (error, response, body1){
+    		request(req.app.get('flickr_api_base_url')+'&user_id='+flickr.user_id+'&method=flickr.photos.getSizes&photo_id='+p.id, function (error, response, body1){
     			var json1 = JSON.parse(body1);
 				var src = {
 					thumb: '', // Large Square
@@ -55,7 +54,6 @@ exports.list = function(req, res){
     		});    		
     	}, 
     	function(err, covers){
-          	console.log(covers);
            	res.render('photos', {
            		covers: covers, 
            		photoset: {

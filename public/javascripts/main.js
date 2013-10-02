@@ -59,8 +59,8 @@ var photosEventHandlers = function(t){
 				title: titles[i],
 				type: 'image',
 				options: {
-					thumbnail: thumbs[i],
-		    		controls: 'thumbnails', 
+					
+		    		 
 		    		slideshow: 3000,
 		    		shadow: true
 				}
