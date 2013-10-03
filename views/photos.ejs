@@ -10,15 +10,15 @@
 
     <div id="photos">
     
-    <% for(var i=0; i<covers.length; i++) {%>
+    <% for(var i=0; i<thumbs.length; i++) {%>
     
         <div id="th<%=i%>" class="thumb_box" style="" >
-            <a class="lv" pos="1" href="<%= covers[i].src.lv %>" thumbnail="<%= covers[i].src.thumb %>" data-lightview-group="a<%= photoset.id %>" data-lightview-title='<a href="<%= covers[i].src.full %>" target="_blank"><%= covers[i].title %></a>'>
+            <a class="lv" pos="1" href="<%= thumbs[i].src.lv %>" thumbnail="<%= thumbs[i].src.thumb %>" data-lightview-group="a<%= photoset.id %>" data-lightview-title='<a href="<%= thumbs[i].src.full %>" target="_blank"><%= thumbs[i].title %></a>'>
                 <div id="t<%=i%>" class="thumb" style="background-image: url('/images/ajax-loader7.gif'); background-position: 50% 50%; "></div>
-                <div id="u<%= covers[i].id %>" class="showexif thumb ttip" si='<%=i%>' ai='<%= photoset.id %>' pi='<%= covers[i].id %>' ps='<%= covers[i].secret %>' style="float: none; display: none; background-image: url(<%= covers[i].src.thumb %>); "></div>
-                <img style="display: none;" src="<%= covers[i].src.thumb %>" onload="$('#t<%=i%>').hide(); $('#u<%= covers[i].id %>').show();"/>
+                <div id="u<%= thumbs[i].id %>" class="showexif thumb ttip" si='<%=i%>' ai='<%= photoset.id %>' pi='<%= thumbs[i].id %>' ps='<%= thumbs[i].secret %>' style="float: none; display: none; background-image: url(<%= thumbs[i].src.thumb %>); "></div>
+                <img style="display: none;" src="<%= thumbs[i].src.thumb %>" onload="$('#t<%=i%>').hide(); $('#u<%= thumbs[i].id %>').show();"/>
             </a>
-            <a href="<%= covers[i].src.lv %>" title='Otwórz w nowym oknie' target="_blank"><img class="full" src="/images/n3.png" alt="full size"></a>
+            <a href="<%= thumbs[i].src.lv %>" title='Otwórz w nowym oknie' target="_blank"><img class="full" src="/images/n3.png" alt="full size"></a>
             <span style="display: none;">vision:night=052,</span>
         </div>
 

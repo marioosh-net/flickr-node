@@ -51,8 +51,10 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 // app.get('/photosets', photosets.list)
-app.get('/album/:id', photos.list)
-app.get('/exif/:id/:secret', exif.list)
+app.get('/album/:id', photos.list);
+app.get('/direct/:id', routes.index);
+app.get('/exif/:id/:secret', exif.list);
+app.set('photos', photos);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

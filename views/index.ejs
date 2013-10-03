@@ -83,24 +83,25 @@
                           <div class="clear"></div>
                         </div>
                         
-                        <div id="right">    
-    <div id="mini">
-        <div id="photos">
-            <div class="covers">
-                <div class="thumbs">
-
-                    <!-- COVERS -->
-                    <% include photosets.ejs %>
-                    
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-        </div>          
-    </div>
-
-</div>                  
-                        
-                        
+                        <div id="right">
+                            <% if(photoset_id) { %>
+                                <% include photos.ejs %>
+                            <% } else { %>    
+                                <div id="mini">
+                                    <div id="photos">
+                                        <div class="covers">
+                                            <div class="thumbs">
+                            
+                                                <!-- COVERS -->
+                                                <% include photosets.ejs %>
+                                                
+                                            </div>
+                                            <div style="clear: both;"></div>
+                                        </div>
+                                    </div>          
+                                </div>
+                            <% } %>
+                        </div>                  
                         
                         <div id="footer-right">
                             Inspired by <a href="http://minishowcase.net">minishowcase</a>. Powered by <a href="http://nodejs.org/"><img style="vertical-align: top;" src="/images/node.png"></a>&nbsp;|&nbsp;<a href="http://marioosh.net">marioosh.net</a>

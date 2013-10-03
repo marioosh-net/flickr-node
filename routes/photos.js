@@ -7,17 +7,15 @@
 var async = require('async');
 var request = require('request');
 
-exports.list = function(req, res){
+var getPhotos = function(req, photoset_id, callback1) {
 	var photoset_id = req.params.id;
 	
-    var flickr = req.app.get('flickr');
-
     request(req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos', function (error, response, body) {
     	var json = JSON.parse(body);
     	var photos = json.photoset.photo;
     	
     	async.concat(photos, function(p, callback){
-    		request(req.app.get('flickr_api_base_url')+'&user_id='+flickr.user_id+'&method=flickr.photos.getSizes&photo_id='+p.id, function (error, response, body1){
+    		request(req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('flickr').user_id+'&method=flickr.photos.getSizes&photo_id='+p.id, function (error, response, body1){
     			var json1 = JSON.parse(body1);
 				var src = {
 					thumb: '', // Large Square
@@ -54,13 +52,30 @@ exports.list = function(req, res){
     		});    		
     	}, 
     	function(err, covers){
+    		/*
            	res.render('photos', {
-           		covers: covers, 
+           		thumbs: covers, 
            		photoset: {
            			id: photoset_id,
            			title: json.photoset.title
            		}
-           	});    		
+           	});
+           	*/
+    		callback1({
+           		thumbs: covers, 
+           		photoset: {
+           			id: photoset_id,
+           			title: json.photoset.title
+           		}
+           	});
     	});
-    });
+    });	
+};
+
+exports.getPhotos = getPhotos;
+
+exports.list = function(req, res){
+	getPhotos(req, req.params.id, function(data) {
+		res.render('photos', data);
+	});
 };
