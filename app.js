@@ -7,6 +7,7 @@ var express = require('express');
 var routes = require('./routes');
 // var photosets = require('./routes/photosets');
 var photos = require('./routes/photos');
+var oauthmy = require('./routes/oauth');
 var exif = require('./routes/exif');
 var http = require('http');
 var path = require('path');
@@ -33,6 +34,17 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser('your secret here'));
 app.use(express.session());
+app.use(express.cookieParser());
+app.use(express.session({secret: '1234567890QWERTY'}));
+/**
+ * middleware...
+ * expose to .ejs some objects
+ */
+app.use(function (req, res, next) {
+    res.locals.session = req.session;
+    next();
+});
+
 app.use(app.router);
 app.use(require('stylus').middleware(__dirname + '/public'));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -47,6 +59,12 @@ app.get('/', routes.index);
 app.get('/album/:id', photos.list);
 app.get('/direct/:id', routes.index);
 app.get('/exif/:id/:secret', exif.list);
+app.get('/auth', oauthmy.auth);
+app.get('/logout', function(req, res){
+	req.session.destroy();
+	req.session = null;
+	res.redirect('/');
+});
 app.set('photos', photos);
 
 http.createServer(app).listen(app.get('port'), function(){

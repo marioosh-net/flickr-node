@@ -72,16 +72,26 @@
                           <div class="left" style="padding-top: 10px;">
                               <a href="/" class="logoref"><img src="/images/logo.png"></a>
                           </div>
-                        <%/*
-                        <div class="right" style="margin-top: 10px;">
-                        <div class="right">&nbsp;<a href="/?lang=pl">PL</a>|<a href="/?lang=en">EN</a></div>
                         
-                        <span id="form" style="display: none;"><form id="f" method="post" action="/login" style="display: inline;">Login / Hasło<br/><input name="login" type="login" value=""/>
-                        <input name="pass" type="password" value=""/><input type="submit" value="" class="hiddensubmit"/>&nbsp;<a href="#" onclick="$('#f').submit();">OK</a>|<a href="#" onclick="$('#form').hide(); $('#loginb').show();">Anuluj</a><input type="submit" value="Login" style="display: none;"/></form></span>
+                        
+                        <div class="right" style="margin-top: 10px;">
+                            <%/*
+                            <div class="right">&nbsp;<a href="/?lang=pl">PL</a>|<a href="/?lang=en">EN</a></div>
+                        
+                            <span id="form" style="display: none;"><form id="f" method="post" action="/login" style="display: inline;">Login / Hasło<br/><input name="login" type="login" value=""/>
+                            <input name="pass" type="password" value=""/><input type="submit" value="" class="hiddensubmit"/>&nbsp;<a href="#" onclick="$('#f').submit();">OK</a>|<a href="#" onclick="$('#form').hide(); $('#loginb').show();">Anuluj</a><input type="submit" value="Login" style="display: none;"/></form></span>
                                 <a id="loginb" href="#" onclick="$('#form').toggle(); $(this).toggle();">Zaloguj</a>
-                                               
+                        
+                            */%>
+                            <%
+                            if(session.auth) { %>
+                                <a href="/logout">Logout</a>
+                            <% } else { %>
+                                <a href="/auth">Login</a>    
+                            <% } %>
                         </div>
-                          */%>
+                        
+                          
                           <div class="clear"></div>
                         </div>
                         
