@@ -910,3 +910,6 @@ a.on {
     padding: 5px;
     text-align: center;
 }
+.slideshow-play {
+	font-size: 12px !important;
+}

@@ -76,6 +76,10 @@ exports.getPhotos = getPhotos;
 
 exports.list = function(req, res){
 	getPhotos(req, req.params.id, function(data) {
-		res.render('photos', data);
+		if(req.query.play != null) {
+			res.render('play', data);
+		} else {
+			res.render('photos', data);
+		}
 	});
 };
