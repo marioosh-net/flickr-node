@@ -12,14 +12,7 @@ var http = require('http');
 var path = require('path');
 
 // flickr
-var flickr = {
-    base_url: 'http://api.flickr.com/services/rest',
-    consumer_key: '433ea818849c5c5ed6ac545b243196b1',
-    user_id: '96083601@N05',
-    consumer_secret: '17aebaefbdd995ef',
-    oauth_token: '72157636044924706-e2e797a4ef481cb5',
-    oauth_token_secret: '4a5a4e212550d84e'
-};
+var flickr = require('./config');
 
 var sha1 = require('./node_modules/flickr-with-uploads/node_modules/oauth/lib/sha1'); 
 
