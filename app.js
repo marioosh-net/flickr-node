@@ -11,6 +11,7 @@ var oauthmy = require('./routes/oauth');
 var exif = require('./routes/exif');
 var http = require('http');
 var path = require('path');
+var OAuth = require('OAuth');
 
 // flickr
 var flickr = require('./config');
@@ -23,6 +24,8 @@ var app = express();
 // all environments
 app.set('flickr_api_base_url', flickr.base_url+'?format=json&nojsoncallback=1&oauth_consumer_key='+flickr.consumer_key);
 app.set('flickr', flickr);
+app.set('photos', photos);
+app.set('OAuth', OAuth);
 app.set('http', http);
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');
@@ -32,10 +35,8 @@ app.use(express.logger('dev'));
 app.use(express.compress());
 app.use(express.bodyParser());
 app.use(express.methodOverride());
-app.use(express.cookieParser('your secret here'));
+app.use(express.cookieParser('1234567890QWERTY'));
 app.use(express.session());
-app.use(express.cookieParser());
-app.use(express.session({secret: '1234567890QWERTY'}));
 /**
  * middleware...
  * expose to .ejs some objects
@@ -54,18 +55,18 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
+/**
+ * routes
+ */
 app.get('/', routes.index);
-// app.get('/photosets', photosets.list)
 app.get('/album/:id', photos.list);
 app.get('/direct/:id', routes.index);
 app.get('/exif/:id/:secret', exif.list);
 app.get('/auth', oauthmy.auth);
 app.get('/logout', function(req, res){
 	req.session.destroy();
-	req.session = null;
 	res.redirect('/');
 });
-app.set('photos', photos);
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

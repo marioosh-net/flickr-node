@@ -10,6 +10,13 @@ var request = require('request');
 var getPhotos = function(req, photoset_id, callback1) {
 	var photoset_id = req.params.id;
 	
+	var OAuth = req.app.get('OAuth');
+	if(req.session.auth != null) {
+		// sign url... 
+		// var url = OAuth.signUrl(req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos', req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, 'GET');
+		// console.log('URL:' + url);
+	}
+	
     request(req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos', function (error, response, body) {
     	var json = JSON.parse(body);
     	var photos = json.photoset.photo;

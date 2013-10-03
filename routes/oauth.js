@@ -1,10 +1,11 @@
 /*
- * flickr.photos.getExif
+ * authorize OAuth
  */
-var OAuth = require('OAuth');
+// var OAuth = require('OAuth');
 var c = require('../config.js');
 
 exports.auth = function(req, res){
+	var OAuth = req.app.get('OAuth');
 	var oa = new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
 			"https://www.flickr.com/services/oauth/access_token",
 			c.consumer_key,
