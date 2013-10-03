@@ -1,6 +1,6 @@
 <% for(var i=0; i<covers.length; i++) {%>
     <a url='/album/<%= covers[i].id %>' selector='#uu<%=i%>' href="#" title="<%= covers[i].title %>" class="openalbum pub" >
-        <div id="uu0" class='oneset oneset_<%= covers[i].id %>'>
+        <div id="uu<%=i%>" class='oneset oneset_<%= covers[i].id %>'>
             <%= covers[i].title %>
         </div>
      </a>
