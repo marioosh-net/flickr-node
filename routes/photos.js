@@ -132,6 +132,17 @@ var getPhotos = function(req, photoset_id, callback) {
 	var photoset_id = req.params.id;
 
 	/**
+	 * get photos that can be accessed for not authorized and authorized user
+	 *
+	getFiltered(req, photoset_id, '', function(data){
+		callback(data);
+	}
+	*/
+			
+	/**
+	 * for gallery use
+	 */
+	/**
 	 * get public photos (first request)
 	 */
 	getFiltered(req, photoset_id, 1, function(data){
