@@ -46,15 +46,16 @@ app.use(function (req, res, next) {
     res.locals.session = req.session;
     
     /**
+     * TEST, DELETE THIS
      * for test authenticated requests
-     *
+     */
     req.session.auth = { results:
     { fullname: 'Mario Oiram',
         user_nsid: '96083601@N05',
         username: 'mario790329' },
      oauth_access_token: '72157636044924706-e2e797a4ef481cb5',
      oauth_access_token_secret: '4a5a4e212550d84e' };
-    */
+    
     
     next();
 });
