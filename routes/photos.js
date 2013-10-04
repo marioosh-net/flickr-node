@@ -7,44 +7,86 @@
 var async = require('async');
 var request = require('request');
 
-var getPhotos = function(req, photoset_id, callback1) {
-	var photoset_id = req.params.id;
-
-	var oa = req.app.get('oa');
+/**
+ * filter:
+ * 1 public photos
+ * 2 private photos visible to friends
+ * 3 private photos visible to family
+ * 4 private photos visible to friends & family
+ * 5 completely private photos 
+ * 
+ * callback function get one parameter - data in format like below:
+ * {
+ "thumbs": [
+  {
+   "id": "XXXXX",
+   "title": "west_of_memphis.jpg",
+   "secret": "YYY",
+   "src": {
+    "thumb": "http://farm6.staticflickr.com/5512/XXXXX_YYY_q.jpg",
+    "full": "http://farm6.staticflickr.com/5512/XXXXX_YYY_o.jpg",
+    "lv": "http://farm6.staticflickr.com/5512/XXXXX_YYY_b.jpg",
+    "medium": "http://farm6.staticflickr.com/5512/XXXXX_YYY.jpg"
+   }
+  }
+ ],
+ "photoset": {
+  "id": "ZZZZZ",
+  "title": "West of Memphis"
+ }
+}
+ */
+var getFiltered = function(req, photoset_id, filter, callback) {
+	var flickr_photosets_getPhotos_url = req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos'+'&extras=tags'+'&privacy_filter='+filter;
 	
-	var flickr_photosets_getPhotos_url = req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos';
-	
+	/**
+	 * full authorized access
+	 * url with '&oauth_token=...'
+	 */
 	if(req.session.auth != null) {
-		//flickr_photosets_getPhotos_url = oa.signUrl(flickr_photosets_getPhotos_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, 'GET');
-		flickr_photosets_getPhotos_url += '&oauth_token='+req.session.auth.oauth_access_token;
-		console.log(flickr_photosets_getPhotos_url);
-		/*
+		/**
+		 * 1 solution
+		 * request using oa.get()
+		var oa = req.app.get('oa');
 		oa.get(flickr_photosets_getPhotos_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, function (err, data, response){
 		  console.log('==>Access the protected resource with access token');
 		  console.log(JSON.stringify(JSON.parse(data), null, 1));
+		  ...
 		});
 		*/
+
+		/**
+		 * 2 solution
+		 * build signed url using oa.signUrl()
+		var oa = req.app.get('oa'); 
+		flickr_photosets_getPhotos_url = oa.signUrl(flickr_photosets_getPhotos_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, 'GET');
+		*/
+		
+		/**
+		 * 3 solution (simplest, works too)
+		 */
+		flickr_photosets_getPhotos_url += '&oauth_token='+req.session.auth.oauth_access_token;
 	}
-	
-    request(flickr_photosets_getPhotos_url, function (error, response, body) {
-    	var json = JSON.parse(body);
-    	// console.log(JSON.stringify(json, null, 1));
-    	var photos = json.photoset.photo;
-    	
-    	async.concat(photos, function(p, callback){
+	request(flickr_photosets_getPhotos_url, function(error, response, body){
+		var json = JSON.parse(body);
+		var photos = json.photoset.photo;
+		// callback(error, {photos: photos, photoset: json.photoset});
+		// callback(error, json);
+
+    	async.concat(json.photoset.photo, function(p, callback2){
     		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('flickr').user_id+'&method=flickr.photos.getSizes&photo_id='+p.id;
     		if(req.session.auth != null) {
-    			//flickr_photos_getSizes_url = oa.signUrl(flickr_photos_getSizes_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, 'GET');
     			flickr_photos_getSizes_url += '&oauth_token='+req.session.auth.oauth_access_token;
     		}
+    		
     		request(flickr_photos_getSizes_url, function (error, response, body1){
     			var json1 = JSON.parse(body1);
-				var src = {
-					thumb: '', // Large Square
-					full: '', // Original
-					lv: '', // Large
-					medium: '' // Medium 
-				}
+    			var src = {
+    				thumb: '',	// Large Square
+    				full: '',	// Original
+    				lv: '',		// Large
+    				medium: ''	// Medium 
+    			}
     			var sizes = json1.sizes.size;
     			for(var i = 0; i < sizes.length; i++) {
     				var s = sizes[i];
@@ -70,28 +112,42 @@ var getPhotos = function(req, photoset_id, callback1) {
     					secret: p.secret,
     					src: src
     			};
-    			callback(null, cover);
-    		});    		
+    			callback2(error, cover);
+    		});    			
     	}, 
     	function(err, covers){
-    		/*
-           	res.render('photos', {
+    		callback({
            		thumbs: covers, 
            		photoset: {
            			id: photoset_id,
            			title: json.photoset.title
            		}
            	});
-           	*/
-    		callback1({
-           		thumbs: covers, 
-           		photoset: {
-           			id: photoset_id,
-           			title: json.photoset.title
-           		}
-           	});
+    	});    		
+	});
+}
+
+var getPhotos = function(req, photoset_id, callback) {
+	var photoset_id = req.params.id;
+
+	/**
+	 * get public photos (first request)
+	 */
+	getFiltered(req, photoset_id, 1, function(data){
+		
+    	/**
+    	 * get private photos visible to friends & family (second request)
+    	 */
+    	getFiltered(req, photoset_id, 4, function(data1){
+    		
+    		/**
+    		 * merge results
+    		 */
+    		data.thumbs = data.thumbs.concat(data1.thumbs);
+    		
+    		callback(data);
     	});
-    });	
+	});
 };
 
 exports.getPhotos = getPhotos;

@@ -15,8 +15,8 @@
         <div id="th<%=i%>" class="thumb_box" style="" >
             <a class="lv" pos="1" href="<%= thumbs[i].src.lv %>" thumbnail="<%= thumbs[i].src.thumb %>" data-lightview-group="a<%= photoset.id %>" data-lightview-title='<a href="<%= thumbs[i].src.full %>" target="_blank"><%= thumbs[i].title %></a>'>
                 <div id="t<%=i%>" class="thumb" style="background-image: url('/images/ajax-loader7.gif'); background-position: 50% 50%; "></div>
-                <div id="u<%= thumbs[i].id %>" class="showexif thumb ttip" si='<%=i%>' ai='<%= photoset.id %>' pi='<%= thumbs[i].id %>' ps='<%= thumbs[i].secret %>' style="float: none; display: none; background-image: url(<%= thumbs[i].src.thumb %>); "></div>
-                <img style="display: none;" src="<%= thumbs[i].src.thumb %>" onload="$('#t<%=i%>').hide(); $('#u<%= thumbs[i].id %>').show();"/>
+                <div id="u<%=i%>" class="showexif thumb ttip" si='<%=i%>' ai='<%= photoset.id %>' pi='<%= thumbs[i].id %>' ps='<%= thumbs[i].secret %>' style="float: none; display: none; background-image: url(<%= thumbs[i].src.thumb %>); "></div>
+                <img style="display: none;" src="<%= thumbs[i].src.thumb %>" onload="$('#t<%=i%>').hide(); $('#u<%=i%>').show();"/>
             </a>
             <a href="<%= thumbs[i].src.lv %>" title='Otwórz w nowym oknie' target="_blank"><img class="full" src="/images/n3.png" alt="full size"></a>
             <span style="display: none;">vision:night=052,</span>
