@@ -16,18 +16,24 @@ var OAuth = require('OAuth');
 // flickr
 var flickr = require('./config');
 
-var sha1 = require('./node_modules/flickr-with-uploads/node_modules/oauth/lib/sha1'); 
-
-
 var app = express();
 
 // all environments
 app.set('flickr_api_base_url', flickr.base_url+'?format=json&nojsoncallback=1&oauth_consumer_key='+flickr.consumer_key);
 app.set('flickr', flickr);
 app.set('photos', photos);
-app.set('OAuth', OAuth);
 app.set('http', http);
 app.set('port', process.env.PORT || 3000);
+
+var oa = new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
+		"https://www.flickr.com/services/oauth/access_token",
+		flickr.consumer_key,
+		flickr.consumer_secret,
+		"1.0",
+		'http://127.0.0.1:'+app.get('port')+'/auth?callback=1',
+		"HMAC-SHA1");
+app.set('oa', oa);
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -43,6 +49,17 @@ app.use(express.session());
  */
 app.use(function (req, res, next) {
     res.locals.session = req.session;
+    
+    /**
+     * for test authenticated requests
+     */
+    req.session.auth = { results:
+    { fullname: 'Mario Oiram',
+        user_nsid: '96083601@N05',
+        username: 'mario790329' },
+     oauth_access_token: '72157636044924706-e2e797a4ef481cb5',
+     oauth_access_token_secret: '4a5a4e212550d84e' };
+    
     next();
 });
 

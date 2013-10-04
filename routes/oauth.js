@@ -1,18 +1,9 @@
 /*
  * authorize OAuth
  */
-// var OAuth = require('OAuth');
-var c = require('../config.js');
 
 exports.auth = function(req, res){
-	var OAuth = req.app.get('OAuth');
-	var oa = new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
-			"https://www.flickr.com/services/oauth/access_token",
-			c.consumer_key,
-			c.consumer_secret,
-			"1.0",
-			'http://127.0.0.1:'+req.app.get('port')+'/auth?callback=1',
-			"HMAC-SHA1");
+	var oa = req.app.get('oa');
 	
 	if(req.param('callback')) {
 		var oauth_token = req.param('oauth_token');
