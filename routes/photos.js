@@ -13,7 +13,8 @@ var request = require('request');
  * 2 private photos visible to friends
  * 3 private photos visible to family
  * 4 private photos visible to friends & family
- * 5 completely private photos 
+ * 5 completely private photos
+ * '' no filter 
  * 
  * callback function get one parameter - data in format like below:
  * {
@@ -65,7 +66,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 		/**
 		 * 3 solution (simplest, works too)
 		 */
-		flickr_photosets_getPhotos_url += '&oauth_token='+req.session.auth.oauth_access_token;
+		flickr_photosets_getPhotos_url += '&oauth_token='+req.session.auth.oauth_access_token + '&user_id='+req.session.auth.results.user_nsid;
 	}
 	request(flickr_photosets_getPhotos_url, function(error, response, body){
 		var json = JSON.parse(body);
@@ -76,7 +77,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
     	async.concat(json.photoset.photo, function(p, callback2){
     		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('flickr').user_id+'&method=flickr.photos.getSizes&photo_id='+p.id;
     		if(req.session.auth != null) {
-    			flickr_photos_getSizes_url += '&oauth_token='+req.session.auth.oauth_access_token;
+    			flickr_photos_getSizes_url += '&oauth_token='+req.session.auth.oauth_access_token + '&user_id='+req.session.auth.results.user_nsid;
     		}
     		
     		request(flickr_photos_getSizes_url, function (error, response, body1){
@@ -134,19 +135,23 @@ var getPhotos = function(req, photoset_id, callback) {
 	 * get public photos (first request)
 	 */
 	getFiltered(req, photoset_id, 1, function(data){
-		
-    	/**
-    	 * get private photos visible to friends & family (second request)
-    	 */
-    	getFiltered(req, photoset_id, 4, function(data1){
-    		
-    		/**
-    		 * merge results
-    		 */
-    		data.thumbs = data.thumbs.concat(data1.thumbs);
-    		
-    		callback(data);
-    	});
+
+		if(req.session.auth != null) {
+	    	/**
+	    	 * get private photos visible to friends & family (second request)
+	    	 */
+	    	getFiltered(req, photoset_id, 4, function(data1){
+	    		
+	    		/**
+	    		 * merge results
+	    		 */
+	    		data.thumbs = data.thumbs.concat(data1.thumbs);
+	    		
+	    		callback(data);
+	    	});
+		} else {
+    		callback(data);			
+		}
 	});
 };
 
