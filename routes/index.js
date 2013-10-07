@@ -11,9 +11,9 @@ var request = require('request');
 exports.index = function(req, res){
 	var photoset_id = req.params.id;
 
-	var flickr_photosets_getList_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('flickr').user_id+'&method=flickr.photosets.getList';
-	if(req.session.auth != null) {
-		flickr_photosets_getList_url += '&oauth_token='+req.session.auth.oauth_access_token + '&user_id='+req.session.auth.results.user_nsid;
+	var flickr_photosets_getList_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photosets.getList';
+	if(req.app.get('config').auth != null) {
+		flickr_photosets_getList_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	}
 	
     request(flickr_photosets_getList_url, function (error, response, body) {
@@ -38,10 +38,10 @@ exports.index = function(req, res){
     		// get titles and covers + render
 	    	async.concat(ps, function(p, callback){
 	    		
-	    		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('flickr').user_id+'&method=flickr.photos.getSizes&photo_id='+p.primary;
-	    		if(req.session.auth != null) {
-	    			//flickr_photos_getSizes_url = oa.signUrl(flickr_photos_getSizes_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, 'GET');
-	    			flickr_photos_getSizes_url += '&oauth_token='+req.session.auth.oauth_access_token + '&user_id='+req.session.auth.results.user_nsid;
+	    		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photos.getSizes&photo_id='+p.primary;
+	    		if(req.app.get('config').auth != null) {
+	    			//flickr_photos_getSizes_url = oa.signUrl(flickr_photos_getSizes_url, req.app.get('config').auth.oauth_access_token, req.app.get('config').auth.oauth_access_token_secret, 'GET');
+	    			flickr_photos_getSizes_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	    		}
 	    		
 	    		request(flickr_photos_getSizes_url, function (error, response, body1){

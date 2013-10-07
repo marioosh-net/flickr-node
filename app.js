@@ -10,8 +10,8 @@ var OAuth = require('OAuth');
 /**
  * check flickr configuration
  */
-var flickr = require('./config'); // flickr config
-if(!flickr.user_id || !flickr.consumer_key) {
+var config = require('./config.json'); // flickr config
+if(!config.user_id || !config.consumer_key) {
 	console.log('Configuration failed. Check configuration (config.js)');
 	process.exit(1);
 }
@@ -22,8 +22,8 @@ if(!flickr.user_id || !flickr.consumer_key) {
 var app = express();
 
 // all environments
-app.set('flickr_api_base_url', (flickr.use_https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+flickr.consumer_key);
-app.set('flickr', flickr);
+app.set('flickr_api_base_url', (config.use_https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config.consumer_key);
+app.set('config', config);
 app.set('photos', photos);
 app.set('http', http);
 app.set('port', process.env.PORT || 3000);
@@ -33,10 +33,10 @@ app.set('port', process.env.PORT || 3000);
  */
 var oa = new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
 		"https://www.flickr.com/services/oauth/access_token",
-		flickr.consumer_key,
-		flickr.consumer_secret,
+		config.consumer_key,
+		config.consumer_secret,
 		"1.0",
-		'http://127.0.0.1:'+app.get('port')+'/auth?callback=1',
+		'http://127.0.0.1:'+app.get('port')+'/setup?callback=1',
 		"HMAC-SHA1");
 app.set('oa', oa);
 
@@ -54,20 +54,7 @@ app.use(express.session());
  * expose to .ejs some objects
  */
 app.use(function (req, res, next) {
-    res.locals.session = req.session;
-    
-    /**
-     * TEST, DELETE THIS
-     * for test authenticated requests
-     *
-    req.session.auth = { results:
-    { fullname: 'Mario Oiram',
-        user_nsid: '96083601@N05',
-        username: 'mario790329' },
-     oauth_access_token: '72157636044924706-e2e797a4ef481cb5',
-     oauth_access_token_secret: '4a5a4e212550d84e' };
-    */
-    
+    //res.locals.session = req.session;
     next();
 });
 
@@ -87,7 +74,7 @@ app.get('/', routes.index);
 app.get('/album/:id', photos.list);
 app.get('/direct/:id', routes.index);
 app.get('/exif/:id/:secret', exif.list);
-app.get('/auth', oauthmy.auth);
+app.get('/setup', oauthmy.auth);
 app.get('/logout', function(req, res){
 	req.session.destroy();
 	res.redirect('/');

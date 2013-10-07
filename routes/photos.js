@@ -44,12 +44,12 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 	 * full authorized access
 	 * url with '&oauth_token=...'
 	 */
-	if(req.session.auth != null) {
+	if(req.app.get('config').auth != null) {
 		/**
 		 * 1 solution
 		 * request using oa.get()
 		var oa = req.app.get('oa');
-		oa.get(flickr_photosets_getPhotos_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, function (err, data, response){
+		oa.get(flickr_photosets_getPhotos_url, req.app.get('config').auth.oauth_access_token, req.app.get('config').auth.oauth_access_token_secret, function (err, data, response){
 		  console.log('==>Access the protected resource with access token');
 		  console.log(JSON.stringify(JSON.parse(data), null, 1));
 		  ...
@@ -60,13 +60,13 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 		 * 2 solution
 		 * build signed url using oa.signUrl()
 		var oa = req.app.get('oa'); 
-		flickr_photosets_getPhotos_url = oa.signUrl(flickr_photosets_getPhotos_url, req.session.auth.oauth_access_token, req.session.auth.oauth_access_token_secret, 'GET');
+		flickr_photosets_getPhotos_url = oa.signUrl(flickr_photosets_getPhotos_url, req.app.get('config').auth.oauth_access_token, req.app.get('config').auth.oauth_access_token_secret, 'GET');
 		*/
 		
 		/**
 		 * 3 solution (simplest, works too)
 		 */
-		flickr_photosets_getPhotos_url += '&oauth_token='+req.session.auth.oauth_access_token + '&user_id='+req.session.auth.results.user_nsid;
+		flickr_photosets_getPhotos_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	}
 	request(flickr_photosets_getPhotos_url, function(error, response, body){
 		var json = JSON.parse(body);
@@ -75,9 +75,9 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 		// callback(error, json);
 
     	async.concat(json.photoset.photo, function(p, callback2){
-    		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('flickr').user_id+'&method=flickr.photos.getSizes&photo_id='+p.id;
-    		if(req.session.auth != null) {
-    			flickr_photos_getSizes_url += '&oauth_token='+req.session.auth.oauth_access_token + '&user_id='+req.session.auth.results.user_nsid;
+    		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photos.getSizes&photo_id='+p.id;
+    		if(req.app.get('config').auth != null) {
+    			flickr_photos_getSizes_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
     		}
     		
     		request(flickr_photos_getSizes_url, function (error, response, body1){
@@ -132,38 +132,42 @@ var getPhotos = function(req, photoset_id, callback) {
 	var photoset_id = req.params.id;
 
 	/**
+	 * MODE 1
 	 * get photos that can be accessed for not authorized and authorized user
-	 *
-	getFiltered(req, photoset_id, '', function(data){
-		callback(data);
+	 */
+	if(req.app.get('config').mode == 1) {
+		getFiltered(req, photoset_id, '', function(data){
+			callback(data);
+		});
+	} else {
+				
+		/**
+		 * for gallery use
+		 */
+		/**
+		 * MODE 2
+		 * get public photos (first request)
+		 */
+		getFiltered(req, photoset_id, 1, function(data){
+	
+			if(req.app.get('config').auth != null) {
+		    	/**
+		    	 * get private photos visible to friends & family (second request)
+		    	 */
+		    	getFiltered(req, photoset_id, 4, function(data1){
+		    		
+		    		/**
+		    		 * merge results
+		    		 */
+		    		data.thumbs = data.thumbs.concat(data1.thumbs);
+		    		
+		    		callback(data);
+		    	});
+			} else {
+	    		callback(data);			
+			}
+		});
 	}
-	*/
-			
-	/**
-	 * for gallery use
-	 */
-	/**
-	 * get public photos (first request)
-	 */
-	getFiltered(req, photoset_id, 1, function(data){
-
-		if(req.session.auth != null) {
-	    	/**
-	    	 * get private photos visible to friends & family (second request)
-	    	 */
-	    	getFiltered(req, photoset_id, 4, function(data1){
-	    		
-	    		/**
-	    		 * merge results
-	    		 */
-	    		data.thumbs = data.thumbs.concat(data1.thumbs);
-	    		
-	    		callback(data);
-	    	});
-		} else {
-    		callback(data);			
-		}
-	});
 };
 
 exports.getPhotos = getPhotos;
