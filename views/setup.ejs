@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>flickr-node</title>
+        <link rel="stylesheet" media="screen" href="/stylesheets/main.css">
+        <script src="/javascripts/jquery-1.7.1.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/javascripts/main.js"></script>
+        
+        <!-- lightview -->
+        <script src="/javascripts/swfobject.js" type="text/javascript"></script>
+        <!--[if lt IE 9]>
+          <script type="text/javascript" src="/javascripts/excanvas/excanvas.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="/javascripts/spinners/spinners.min.js"></script>
+        <script type="text/javascript" src="/javascripts/lightview/lightview.js"></script>
+        <link rel="stylesheet" type="text/css" href="/stylesheets/lightview/lightview.css" />
+
+        <!-- scrolling photosets-listonly -->                
+        <link rel="stylesheet" type="text/css" href="/stylesheets/jquery.jscrollpane.css" />
+        <script type="text/javascript" src="/javascripts/jquery.mousewheel.js"></script>
+        <script type="text/javascript" src="/javascripts/jquery.jscrollpane.min.js"></script>
+        
+    </head>
+    <body id="body">
+    <div id="msg"></div>
+    <div id="wrapper">  
+        <div id="main">
+            
+            <div id="content">      
+                <div class="fixedwidth">
+                    <div class="left">
+                        <div id="header">
+                          <div class="left" style="padding-top: 10px;">
+                              <a href="/" class="logoref"><img src="/images/logo.png"></a>
+                          </div>
+                        </div>
+
+                        <h2>Setup</h2><br/>
+                        <div>
+                            <form method="POST" id="setup">
+                                <span>Flickr Api Key (consumer_key)</span></br>
+                                <input type="text" name="consumer_key" value="433ea818849c5c5ed6ac545b243196b1"/><br/>
+                                
+                                <span>Flickr Secret (consumer_secret)</span></br>
+                                <input type="text" name="consumer_secret" value="17aebaefbdd995ef"/><br/>
+                                
+                                <span>Gallery mode (what will be visible on Your gallery)</span></br>
+                                <select name="mode">
+                                    <option value="1">only public photos</option>
+                                    <option value="2">public photos + private photos visible to friends & family</option>
+                                </select><br/>
+                                <%/*<span>Flickr NSID</span></br>
+                                <input type="text" name="user_id"/><br/>*/%>
+                                <input class="hiddensubmit" type="submit" value="OK">
+                                <p>
+                                    <h3><a href="#" onclick="$('#setup').submit();">Save</a></h3>
+                                </p>
+                                
+                            </form>
+                            <br/>
+                        </div>
+
+                        <div id="footer-right">
+                            Inspired by <a href="http://minishowcase.net">minishowcase</a>. Powered by <a href="http://nodejs.org/"><img style="vertical-align: top;" src="/images/node.png"></a>&nbsp;|&nbsp;<a href="http://marioosh.net">marioosh.net</a>
+                            <br>Zdjęcia prezentowane na stronie nie mogą być wykorzystane bez zgody autora
+                            <div class="left"></div>
+                            <div class="right"></div>
+                            <div class="clear"></div>
+                        </div>
+
+                        <div id="debug" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

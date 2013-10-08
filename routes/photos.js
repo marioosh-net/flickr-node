@@ -44,7 +44,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 	 * full authorized access
 	 * url with '&oauth_token=...'
 	 */
-	if(req.app.get('config').auth != null) {
+	if(req.app.get('config').auth != null && req.app.get('config').mode != 1) {
 		/**
 		 * 1 solution
 		 * request using oa.get()
@@ -68,6 +68,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 		 */
 		flickr_photosets_getPhotos_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	}
+
 	request(flickr_photosets_getPhotos_url, function(error, response, body){
 		var json = JSON.parse(body);
 		var photos = json.photoset.photo;
@@ -76,7 +77,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 
     	async.concat(json.photoset.photo, function(p, callback2){
     		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photos.getSizes&photo_id='+p.id;
-    		if(req.app.get('config').auth != null) {
+    		if(req.app.get('config').auth != null && req.app.get('config').mode != 1) {
     			flickr_photos_getSizes_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
     		}
     		
@@ -133,17 +134,14 @@ var getPhotos = function(req, photoset_id, callback) {
 
 	/**
 	 * MODE 1
-	 * get photos that can be accessed for not authorized and authorized user
+	 * get public photos only
 	 */
 	if(req.app.get('config').mode == 1) {
-		getFiltered(req, photoset_id, '', function(data){
+		getFiltered(req, photoset_id, 1, function(data){
 			callback(data);
 		});
 	} else {
 				
-		/**
-		 * for gallery use
-		 */
 		/**
 		 * MODE 2
 		 * get public photos (first request)

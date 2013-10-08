@@ -2,19 +2,19 @@ var express = require('express');
 var routes = require('./routes');
 var photos = require('./routes/photos');
 var oauthmy = require('./routes/oauth');
+var setup = require('./routes/setup');
 var exif = require('./routes/exif');
 var http = require('http');
 var path = require('path');
-var OAuth = require('OAuth');
 
 /**
  * check flickr configuration
  */
 var config = require('./config.json'); // flickr config
-if(!config.user_id || !config.consumer_key) {
+/*if(!config.user_id || !config.consumer_key) {
 	console.log('Configuration failed. Check configuration (config.js)');
 	process.exit(1);
-}
+}*/
 
 /**
  * express app
@@ -22,24 +22,13 @@ if(!config.user_id || !config.consumer_key) {
 var app = express();
 
 // all environments
-app.set('flickr_api_base_url', (config.use_https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config.consumer_key);
+if(config.consumer_key) {
+	app.set('flickr_api_base_url', (config.use_https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config.consumer_key);
+}
 app.set('config', config);
 app.set('photos', photos);
 app.set('http', http);
 app.set('port', process.env.PORT || 3000);
-
-/**
- * OAuth
- */
-var oa = new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
-		"https://www.flickr.com/services/oauth/access_token",
-		config.consumer_key,
-		config.consumer_secret,
-		"1.0",
-		'http://127.0.0.1:'+app.get('port')+'/setup?callback=1',
-		"HMAC-SHA1");
-app.set('oa', oa);
-
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(express.favicon());
@@ -74,7 +63,9 @@ app.get('/', routes.index);
 app.get('/album/:id', photos.list);
 app.get('/direct/:id', routes.index);
 app.get('/exif/:id/:secret', exif.list);
-app.get('/setup', oauthmy.auth);
+app.get('/auth', oauthmy.auth);
+app.get('/setup', setup.get);
+app.post('/setup', setup.post);
 app.get('/logout', function(req, res){
 	req.session.destroy();
 	res.redirect('/');
