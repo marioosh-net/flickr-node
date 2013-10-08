@@ -9,7 +9,7 @@ Application require installed [Node.js](http://nodejs.org/) environment.
 
 Clone the repository
 
-    git clone git://github.com/marioosh-net/flickr-node.git
+    git clone https://github.com/marioosh-net/flickr-node.git
 
 Change directory to project path and get neccessay modules for node.js
 
