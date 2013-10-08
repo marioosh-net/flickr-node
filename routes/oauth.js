@@ -2,7 +2,7 @@
  * authorize OAuth
  */
 
-var OAuth = require('OAuth');
+var OAuth = require('oauth');
 
 exports.auth = function(req, res){
 	
