@@ -25,4 +25,4 @@ To run on specified port number
     PORT=8080 node app.js
 
 Open [http://localhost:3000](http://localhost:3000) in Your browser. You will get setup page where You
-have to type Your API Key, secret and choose gallery mode.
+have to choose gallery mode. Next You will be redirected to authorize app to access Your Flickr account.

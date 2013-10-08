@@ -20,8 +20,6 @@ exports.post = function(req, res){
 		
 		// config.user_id = req.body.user_id;		
 		config.mode = req.body.mode;
-		config.consumer_key = req.body.consumer_key;
-		config.consumer_secret = req.body.consumer_secret;
 		
 		/**
 		 * save config
