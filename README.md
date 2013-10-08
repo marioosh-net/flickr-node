@@ -11,7 +11,7 @@ Clone the repository
 
     git clone https://github.com/marioosh-net/flickr-node.git
 
-Change directory to project path and get neccessay modules for node.js
+Change directory to project path and get necessary modules for node.js
 
     cd flickr-node
     npm install
