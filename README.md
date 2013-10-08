@@ -5,6 +5,8 @@ flickr-node
 
 Installation
 ------------
+Application require installed [Node.js](http://nodejs.org/) environment.
+
 Clone the repository
 
     git clone git://github.com/marioosh-net/flickr-node.git
