@@ -12,17 +12,19 @@ exports.auth = function(req, res){
 		res.send('app configured. route inactive.');
 	} else {
 		
-		var oa = new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
+		var oa = req.app.get('oa') != null ? req.app.get('oa') : new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
 				"https://www.flickr.com/services/oauth/access_token",
 				config.consumer_key,
 				config.consumer_secret,
 				"1.0",
 				'http://127.0.0.1:'+req.app.get('port')+'/auth?callback=1',
-				"HMAC-SHA1");		
-	
+				"HMAC-SHA1");
+		req.app.set('oa',oa);
+		
 		if(req.param('callback')) {
 			var oauth_token = req.param('oauth_token');
 			var oauth_verifier = req.param('oauth_verifier');
+			
 			oa.getOAuthAccessToken(oauth_token, req.session.oauth_token_secret, oauth_verifier, function(err, oauth_access_token, oauth_access_token_secret, results){
 				var secured = {
 					'results': results,
