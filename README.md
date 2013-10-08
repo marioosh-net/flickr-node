@@ -1,7 +1,7 @@
 flickr-node
 ===============
 
-[Flickrj](http://flickrj.sourceforge.net/) gallery powered by [node.js](http://nodejs.org/)
+[Flickr](http://www.flickr.com/) gallery powered by [node.js](http://nodejs.org/)
 
 Installation
 ------------
