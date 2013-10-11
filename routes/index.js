@@ -16,18 +16,26 @@ exports.index = function(req, res){
 		return;
 	}
 
+	var mode2 = false;
 	var flickr_photosets_getList_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photosets.getList';
 	if(req.app.get('config').auth != null && req.app.get('config').mode != 1) {
+		mode2 = true;
 		flickr_photosets_getList_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	}
-
+	
     request(flickr_photosets_getList_url, function (error, response, body) {
     	var json = JSON.parse(body);
     	var ps = json.photosets.photoset;
     	
     	var albums = [];
     	for(var i=0;i<ps.length;i++){
-    		albums.push({id: ps[i].id, title: ps[i].title._content});
+    		/**
+    		 * at MODE2 private sets will be visible if has description == ' ' or contains '[public]'
+    		 */
+    		var contains = ps[i].description._content == ' ' || ps[i].description._content.indexOf('[public]') != -1;
+    		if(!mode2 || (mode2 && contains)) {
+    			albums.push({id: ps[i].id, title: ps[i].title._content, primary:ps[i].primary});
+    		}
     	}
     	
     	if(photoset_id) {
@@ -41,7 +49,7 @@ exports.index = function(req, res){
 			});
     	} else {
     		// get titles and covers + render
-	    	async.concat(ps, function(p, callback){
+	    	async.concat(albums, function(p, callback){
 	    		
 	    		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photos.getSizes&photo_id='+p.primary;
 	    		if(req.app.get('config').auth != null && req.app.get('config').mode != 1) {
@@ -53,7 +61,7 @@ exports.index = function(req, res){
 	    			var json1 = JSON.parse(body1);
 	    			var cover = {
 	    					id: p.id,
-	    					title: p.title._content, 
+	    					title: p.title, 
 	    					thumb: json1.sizes.size[1].source
 	    			};
 	    			callback(null, cover);
@@ -65,3 +73,4 @@ exports.index = function(req, res){
     	}
     });	
 };
+
