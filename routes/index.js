@@ -42,6 +42,9 @@ exports.index = function(req, res){
     		// render albums titles only
     		// plus get and render photos
 			req.app.get('photos').getPhotos(req, photoset_id, function(data){
+		    	albums = albums.sort(function(a,b){
+		    		return a.title > b.title ? -1 : (a.title < b.title ? 1 : 0);
+		    	});
 				res.render('index', {covers: albums, photoset_id: photoset_id,
 					thumbs: data.thumbs,
 					photoset: data.photoset
@@ -68,6 +71,9 @@ exports.index = function(req, res){
 	    		});    		
 	    	}, 
 	    	function(err, covers){
+	        	covers = covers.sort(function(a,b){
+	        		return a.title > b.title ? -1 : (a.title < b.title ? 1 : 0);
+	        	});
 	   			res.render('index', {covers: covers, photoset_id: photoset_id});
 	    	});
     	}
