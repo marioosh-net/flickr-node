@@ -27,3 +27,6 @@ To run on specified port number
 Open [http://localhost:3000](http://localhost:3000) in Your browser. You will get setup page where You
 have to choose gallery mode. Next You will be redirected to authorize app to access Your Flickr account.
 In `mode=2` listed sets need to have `[public]` phrase in description.
+
+Demo on Heroku
+    [http://flickr-node.herokuapp.com/](http://flickr-node.herokuapp.com/)
