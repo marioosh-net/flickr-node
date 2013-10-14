@@ -29,4 +29,5 @@ have to choose gallery mode. Next You will be redirected to authorize app to acc
 In `mode=2` listed sets need to have `[public]` phrase in description.
 
 Demo on Heroku
+
     [http://flickr-node.herokuapp.com/](http://flickr-node.herokuapp.com/)
