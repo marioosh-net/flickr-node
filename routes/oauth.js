@@ -17,7 +17,7 @@ exports.auth = function(req, res){
 				config.consumer_key,
 				config.consumer_secret,
 				"1.0",
-				'http://127.0.0.1:'+req.app.get('port')+'/auth?callback=1',
+				req.app.set('hostport')+'/auth?callback=1',
 				"HMAC-SHA1");
 		req.app.set('oa',oa);
 		
