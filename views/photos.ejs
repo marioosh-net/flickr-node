@@ -13,7 +13,7 @@
     <% for(var i=0; i<thumbs.length; i++) {%>
     
         <div id="th<%=i%>" class="thumb_box" style="" >
-            <a class="lv" pos="1" href="<%= thumbs[i].url_l %>" thumbnail="<%= thumbs[i].url_q %>" data-lightview-group="a<%= photoset.id %>" data-lightview-title='<a href="<%= thumbs[i].url_o %>" target="_blank"><%= thumbs[i].title %></a>'>
+            <a class="lv" pos="<%=i+1%>" href="<%= thumbs[i].url_l %>" thumbnail="<%= thumbs[i].url_q %>" data-lightview-group="a<%= photoset.id %>" data-lightview-title='<a href="<%= thumbs[i].url_o %>" target="_blank"><%= thumbs[i].title %></a>'>
                 <div id="t<%=i%>" class="thumb" style="background-image: url('/images/ajax-loader7.gif'); background-position: 50% 50%; "></div>
                 <div id="u<%=i%>" class="showexif thumb ttip" si='<%=i%>' ai='<%= photoset.id %>' pi='<%= thumbs[i].id %>' ps='<%= thumbs[i].secret %>' style="float: none; display: none; background-image: url(<%= thumbs[i].url_q %>); "></div>
                 <img style="display: none;" src="<%= thumbs[i].url_q %>" onload="$('#t<%=i%>').hide(); $('#u<%=i%>').show();"/>
