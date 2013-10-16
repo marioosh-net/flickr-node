@@ -73,7 +73,4 @@ app.get('/logout', function(req, res){
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
-  require('dns').lookup(require('os').hostname(), function (err, add, fam) {
-	  app.set('hostport', 'http://'+add+':'+app.get('port'));
-  });
 });
