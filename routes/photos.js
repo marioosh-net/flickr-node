@@ -129,7 +129,13 @@ exports.getPhotos = getPhotos;
 exports.list = function(req, res){
 	getPhotos(req, req.params.id, function(data) {
 		if(req.query.play != null) {
-			res.render('play', data);
+
+      // superslides
+			// res.render('play', data);
+
+      // supersized
+			res.render('play2', data);
+
 		} else {
 			res.render('photos', data);
 		}
