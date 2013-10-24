@@ -38,7 +38,7 @@ var request = require('request');
 }
  */
 var getFiltered = function(req, photoset_id, filter, callback) {
-	var flickr_photosets_getPhotos_url = req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos'+'&extras=tags,url_l,url_o,url_q'+'&privacy_filter='+filter;
+	var flickr_photosets_getPhotos_url = req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos'+'&extras=tags,url_l,url_o,url_q,o_dims'+'&privacy_filter='+filter;
 	
 	/**
 	 * full authorized access
