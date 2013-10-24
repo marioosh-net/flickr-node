@@ -21,6 +21,10 @@
           .slides-container .container a:hover {
             text-decoration: underline;
           }
+          .preserve {
+            margin-left: auto;
+            margin-right: auto;
+          }
         </style>
     </head>
 <body>
@@ -28,7 +32,7 @@
     <ul class="slides-container">
     <% for(var i=0; i<thumbs.length; i++) {%>
         <li>
-        <img src="<%= thumbs[i].url_l %>"/>
+        <img src="<%= thumbs[i].url_l %>" class="<% if(parseInt(thumbs[i].height_l) > parseInt(thumbs[i].width_l)){%>preserve<%}%>"/>
         <div class="container"><a href="<%= thumbs[i].url_o %>" target="_blank"><%= thumbs[i].title %></a></div>
         </li>
     <% } %>
