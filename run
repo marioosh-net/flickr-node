@@ -1,0 +1,2 @@
+#!/bin/sh
+PORT=3001 /opt/node/bin/node app.js
