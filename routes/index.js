@@ -17,7 +17,8 @@ exports.index = function(req, res){
 	}
 
 	var mode2 = false;
-	var flickr_photosets_getList_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photosets.getList';
+	var flickr_photosets_getList_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photosets.getList'
+	+'&primary_photo_extras=url_q';
 	if(req.app.get('config').auth != null && req.app.get('config').mode != 1) {
 		mode2 = true;
 		flickr_photosets_getList_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
@@ -34,7 +35,7 @@ exports.index = function(req, res){
     		 */
     		var contains = ps[i].description._content == ' ' || ps[i].description._content.indexOf('[public]') != -1;
     		if(!mode2 || (mode2 && contains)) {
-    			albums.push({id: ps[i].id, title: ps[i].title._content, primary:ps[i].primary});
+    			albums.push({id: ps[i].id, title: ps[i].title._content, primary:ps[i].primary, thumb:ps[i].primary_photo_extras.url_q});
     		}
     	}
     	
@@ -51,31 +52,7 @@ exports.index = function(req, res){
 				});
 			});
     	} else {
-    		// get titles and covers + render
-	    	async.concat(albums, function(p, callback){
-	    		
-	    		var flickr_photos_getSizes_url = req.app.get('flickr_api_base_url')+'&user_id='+req.app.get('config').user_id+'&method=flickr.photos.getSizes&photo_id='+p.primary;
-	    		if(req.app.get('config').auth != null && req.app.get('config').mode != 1) {
-	    			//flickr_photos_getSizes_url = oa.signUrl(flickr_photos_getSizes_url, req.app.get('config').auth.oauth_access_token, req.app.get('config').auth.oauth_access_token_secret, 'GET');
-	    			flickr_photos_getSizes_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
-	    		}
-	    		
-	    		request(flickr_photos_getSizes_url, function (error, response, body1){
-	    			var json1 = JSON.parse(body1);
-	    			var cover = {
-	    					id: p.id,
-	    					title: p.title, 
-	    					thumb: json1.sizes.size[1].source
-	    			};
-	    			callback(null, cover);
-	    		});    		
-	    	}, 
-	    	function(err, covers){
-	        	covers = covers.sort(function(a,b){
-	        		return a.title > b.title ? -1 : (a.title < b.title ? 1 : 0);
-	        	});
-	   			res.render('index', {covers: covers, photoset_id: photoset_id});
-	    	});
+    		res.render('index', {covers: albums, photoset_id: photoset_id});
     	}
     });	
 };
