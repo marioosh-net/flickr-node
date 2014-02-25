@@ -48,6 +48,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 	}
 
 	// console.log('flickr.photosets.getPhotos:'+flickr_photosets_getPhotos_url);
+	console.log('get photos for \''+photoset_id+'\', filter:'+filter+'...');
 	request(flickr_photosets_getPhotos_url, {json:true}, function(error, response, body){
 		body.seturl = 'http://www.flickr.com/photos/'+req.app.get('config').user_id+'/sets/'+photoset_id;
 		callback(body);
@@ -57,28 +58,37 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 exports.getPhotos = function(req, photoset_id, callback) {
 	var photoset_id = req.params.id;
 
-	/**
-	 * MODE 1
-	 * get public photos only
-	 */
-	getFiltered(req, photoset_id, 1, function(data){
-		if(req.app.get('config').mode != 1) {
-			if(req.app.get('config').auth != null) {
-		    	/**
-		    	 * MODE 2
-		    	 * get private photos visible to friends & family (second request)
-		    	 */
-		    	getFiltered(req, photoset_id, 4, function(data1){
-		    		/**
-		    		 * merge results
-		    		 */
-		    		data.photoset.photo = data.photoset.photo.concat(data1.photoset.photo);
-		    		callback(data);
-		    	});
+	var func = [];
+	func[0] = function(callback1){
+		/**
+		 * MODE 1
+		 * get public photos only
+		 */		
+		getFiltered(req, photoset_id, 1, function(data){
+			callback1(null, data);
+		});
+	};
+	if(req.app.get('config').mode != 1 && req.app.get('config').auth != null) {
+    	/**
+    	 * MODE 2
+    	 * get private photos visible to friends & family (second request)
+    	 */			
+		func[1] = function(callback1){
+			getFiltered(req, photoset_id, 4, function(data){
+				callback1(null, data);
+			});
+		};
+	}
+	async.parallel(func, function(err, results){
+		var data = null;
+		for(var i=0;i<results.length;i++) {
+			if(i > 0) {
+				data.photoset.photo = data.photoset.photo.concat(results[i].photoset.photo);
+			} else {
+				data = results[i];
 			}
-		} else {
-			callback(data);				
 		}
+	    callback(data);
 	});
 };
 
