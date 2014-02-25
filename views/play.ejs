@@ -4,6 +4,9 @@
         <title><%= photoset.title %> - Slideshow</title>
         <link rel="stylesheet" media="screen" href="/stylesheets/superslides.css">
         <style>
+          body {
+            background-color: #000;
+          }
           .slides-container .container {
             font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
             font-weight: bold;
@@ -33,7 +36,12 @@
     <% for(var i=0; i<thumbs.length; i++) {%>
         <li>
         <img src="<%= thumbs[i].url_l %>" class="<% if(parseInt(thumbs[i].height_l) > parseInt(thumbs[i].width_l)){%>preserve<%}%>"/>
-        <div class="container"><a href="<%= thumbs[i].url_o %>" target="_blank"><%= thumbs[i].title %></a></div>
+        <div class="container"><a href="<%= thumbs[i].url_o %>" target="_blank"><%= thumbs[i].title %></a>
+         | <a class="stop" href="#">stop</a>
+          <a class="play" href="#">play</a>
+          <a class="prev" href="#">prev</a>
+          <a class="next" href="#">next</a>
+         </div>
         </li>
     <% } %>
     </ul>
@@ -50,6 +58,18 @@
         play: 4000,
         pagination: false
       });
+      $('.stop').click(function(){
+        $('#slides').superslides('stop');
+      });
+      $('.play').click(function(){
+        $('#slides').superslides('start');
+      });      
+      $('.next').click(function(){
+        $('#slides').superslides('animate', 'next');
+      });
+      $('.prev').click(function(){
+        $('#slides').superslides('animate', 'prev');
+      });            
     });
   </script>
 </body>
