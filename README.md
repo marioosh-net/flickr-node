@@ -16,7 +16,7 @@ Change directory to project path and get necessary modules for node.js
     cd flickr-node
     npm install
 
-Fill config.json with Your Api Key and secret.
+Fill _config.json_ with Your Api Key and secret.
 
 Run node.js app (defalt port is 3000) 
 
