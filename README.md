@@ -3,6 +3,8 @@ flickr-node
 
 [Flickr](http://www.flickr.com/) gallery powered by [node.js](http://nodejs.org/)
 
+![flickr-node](http://farm6.staticflickr.com/5497/10158823995_7690a23ceb_o.jpg)
+
 Installation
 ------------
 Application require installed [Node.js](http://nodejs.org/) environment.
