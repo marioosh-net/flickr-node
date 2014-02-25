@@ -29,7 +29,7 @@ exports.index = function(req, res){
 		'&primary_photo_extras=url_q'+
 		(mode2?'&oauth_token='+config.auth.oauth_access_token + '&user_id='+config.auth.results.user_nsid:'');
 	
-	console.log(flickr_photosets_getList_url);
+	// console.log('flickr.photosets.getList:'+flickr_photosets_getList_url);
     request(flickr_photosets_getList_url, {json: true}, function (error, response, body) {
     	var ps = body.photosets.photoset;
     	body.photoset_id = photoset_id;
@@ -58,7 +58,7 @@ exports.index = function(req, res){
 					photoset_id: photoset_id,
 					photoset: data.photoset,
 					seturl: data.seturl,
-					photosets: data
+					photosets: body.photosets
 				});
 			});
     	} else {
