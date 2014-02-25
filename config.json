@@ -1,0 +1,6 @@
+{
+ "use_https": false,
+ "mode": "1",
+ "consumer_key": "YOUR_API_KEY",
+ "consumer_secret": "YOUR_API_SECRET"
+}
