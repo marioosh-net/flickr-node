@@ -12,6 +12,11 @@ exports.index = function(req, res){
 	var config = req.app.get('config');
 	var photoset_id = req.params.id;
 	
+	if(!config.consumer_key || !config.consumer_secret || config.consumer_key == 'YOUR_API_KEY' || config.consumer_secret == 'YOUR_API_SECRET') {
+		res.render('error',{message:'config error. fill config.json with your api key and secret.'});
+		return;
+	}
+	
 	if(!config.user_id) {
 		res.redirect('/setup');
 		return;
