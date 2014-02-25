@@ -1,9 +1,9 @@
-<% for(var i=0; i<covers.length; i++) {%>
-    <div class="thumb_box pub" title="<%= covers[i].title %>">
-        <a href="#" url='/album/<%= covers[i].id %>' selector='#uu<%= i %>' class="openalbum thumb_link">
+<% for(var i=0; i<photosets.photoset.length; i++) {%>
+    <div class="thumb_box pub" title="<%= photosets.photoset[i].title._content %>">
+        <a href="#" url='/album/<%= photosets.photoset[i].id %>' selector='#uu<%= i %>' class="openalbum thumb_link">
             <div id="t<%= i %>" class="thumb" style="background-image: url('/images/ajax-loader7.gif'); background-position: 50% 50%; "></div>
-            <div id="u<%= i %>" class="thumb thumb_box_cover" style="display: none; float: none; background-image: url('<%= covers[i].thumb %>');"></div>
-            <img style="display: none;" src="<%= covers[i].thumb %>" onload="$('#t<%= i %>').hide(); $('#u<%= i %>').show();">
+            <div id="u<%= i %>" class="thumb thumb_box_cover" style="display: none; float: none; background-image: url('<%= photosets.photoset[i].primary_photo_extras.url_q %>');"></div>
+            <img style="display: none;" src="<%= photosets.photoset[i].primary_photo_extras.url_q %>" onload="$('#t<%= i %>').hide(); $('#u<%= i %>').show();">
         </a>
     </div>
 <% } %>

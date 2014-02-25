@@ -33,10 +33,10 @@
 <body>
   <div id="slides">
     <ul class="slides-container">
-    <% for(var i=0; i<thumbs.length; i++) {%>
+    <% for(var i=0; i<photoset.photo.length; i++) {%>
         <li>
-        <img src="<%= thumbs[i].url_l %>" class="<% if(parseInt(thumbs[i].height_l) > parseInt(thumbs[i].width_l)){%>preserve<%}%>"/>
-        <div class="container"><a href="<%= thumbs[i].url_o %>" target="_blank"><%= thumbs[i].title %></a>
+        <img src="<%= photoset.photo[i].url_l %>" class="<% if(parseInt(photoset.photo[i].height_l) > parseInt(photoset.photo[i].width_l)){%>preserve<%}%>"/>
+        <div class="container"><a href="<%= photoset.photo[i].url_o %>" target="_blank"><%= photoset.photo[i].title %></a>
          | <a class="stop" href="#">stop</a>
           <a class="play" href="#">play</a>
           <a class="prev" href="#">prev</a>

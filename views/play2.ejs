@@ -45,8 +45,8 @@
 					thumbnail_navigation    :   0,			// Thumbnail navigation
 
           slides 					:  	[			// Slideshow Images
-            <% for(var i=0; i<thumbs.length; i++) {%>
-              { image: '<%= thumbs[i].url_l %>'}<% if(i<thumbs.length-1) { %>,<% } %>
+            <% for(var i=0; i<photoset.photo.length; i++) {%>
+              { image: '<%= photoset.photo[i].url_l %>'}<% if(i<photoset.photo.length-1) { %>,<% } %>
             <% } %>
 					],
             

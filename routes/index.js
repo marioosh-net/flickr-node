@@ -2,7 +2,6 @@
  * albums + album covers / home page
  * 
  * flickr.photosets.getList
- * flickr.photos.getSizes
  */
 var async = require('async');
 var request = require('request');
@@ -30,26 +29,24 @@ exports.index = function(req, res){
 		'&primary_photo_extras=url_q'+
 		(mode2?'&oauth_token='+config.auth.oauth_access_token + '&user_id='+config.auth.results.user_nsid:'');
 	
-    request(flickr_photosets_getList_url, function (error, response, body) {
-    	var json = JSON.parse(body);
-    	var ps = json.photosets.photoset;
+	console.log(flickr_photosets_getList_url);
+    request(flickr_photosets_getList_url, {json: true}, function (error, response, body) {
+    	var ps = body.photosets.photoset;
+    	body.photoset_id = photoset_id;
     	
-    	var albums = [];
-    	for(var i=0;i<ps.length;i++){
+    	var i = ps.length;
+    	while (i--) {
     		/**
     		 * at MODE2 private sets will be visible if has description == ' ' or contains '[public]'
     		 */
     		var contains = ps[i].description._content == ' ' || ps[i].description._content.indexOf('[public]') != -1;
-    		if(!mode2 || (mode2 && contains)) {
-    			albums.push({id: ps[i].id, title: ps[i].title._content, primary:ps[i].primary, thumb:ps[i].primary_photo_extras.url_q});
+    		if(!(!mode2 || (mode2 && contains))) {
+    			ps.splice(i, 1);
     		}
     	}
     	
-    	/**
-    	 * sort by title
-    	 */
-    	albums = albums.sort(function(a,b){
-    		return a.title > b.title ? -1 : (a.title < b.title ? 1 : 0);
+    	ps = ps.sort(function(a,b){
+    		return a.title._content > b.title._content ? -1 : (a.title._content < b.title._content ? 1 : 0);
     	});
     	
     	if(photoset_id) {
@@ -57,13 +54,15 @@ exports.index = function(req, res){
     		 * render albums titles only + plus get and render photos
     		 */
 			req.app.get('photos').getPhotos(req, photoset_id, function(data){
-				res.render('index', {covers: albums, photoset_id: photoset_id,
-					thumbs: data.thumbs,
-					photoset: data.photoset
+				res.render('index', {
+					photoset_id: photoset_id,
+					photoset: data.photoset,
+					seturl: data.seturl,
+					photosets: data
 				});
 			});
     	} else {
-    		res.render('index', {covers: albums, photoset_id: photoset_id});
+    		res.render('index', body);
     	}
     });	
 };

@@ -914,3 +914,9 @@ a.on {
 	font-size: 14px !important;
     margin-right: 10px;
 }
+.flickr-button {
+	vertical-align: middle;
+}
+.flickr-set {
+	font-size: 0.7em !important; 
+}

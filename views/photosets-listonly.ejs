@@ -1,7 +1,7 @@
-<% for(var i=0; i<covers.length; i++) {%>
-    <a url='/album/<%= covers[i].id %>' selector='#uu<%=i%>' href="#" title="<%= covers[i].title %>" class="openalbum pub" >
-        <div id="uu<%=i%>" class='oneset oneset_<%= covers[i].id %> <%if(covers[i].id == photoset_id){%>album-selected<%}%>'>
-            <%= covers[i].title %>
+<% for(var i=0; i<photosets.photoset.length; i++) {%>
+    <a url='/album/<%= photosets.photoset[i].id %>' selector='#uu<%=i%>' href="#" title="<%= photosets.photoset[i].title._content %>" class="openalbum pub" >
+        <div id="uu<%=i%>" class='oneset oneset_<%= photosets.photoset[i].id %> <%if(photosets.photoset[i].id == photoset_id){%>album-selected<%}%>'>
+            <%= photosets.photoset[i].title._content %>
         </div>
      </a>
 <% } %>
