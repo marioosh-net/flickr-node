@@ -47,7 +47,6 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 		flickr_photosets_getPhotos_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	}
 
-	console.log('flickr.photosets.getPhotos:'+flickr_photosets_getPhotos_url);
 	console.log('get photos for \''+photoset_id+'\', filter:'+filter+'...');
 	request(flickr_photosets_getPhotos_url, {json:true}, function(error, response, body){
 		body.seturl = 'http://www.flickr.com/photos/'+req.app.get('config').user_id+'/sets/'+photoset_id;
