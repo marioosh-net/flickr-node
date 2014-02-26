@@ -2,26 +2,30 @@
  * albums + album covers / home page
  * 
  * flickr.photosets.getList
+ *
+ * in mode without authentication (1 - only public photos)
+ * only public photosets are listed
+ *
+ * in modes with authentication needed (2,3,4,5) 
+ * photosets with "special descriptions" ([public] in description or description=' ')
+ * are listed
+ *
  */
 var async = require('async');
 var request = require('request');
-
+var utils = require('../utils.js');
 
 exports.index = function(req, res){
 	var config = req.app.get('config');
 	var photoset_id = req.params.id;
 	
-	if(!config.consumer_key || !config.consumer_secret || config.consumer_key == 'YOUR_API_KEY' || config.consumer_secret == 'YOUR_API_SECRET') {
-		res.render('error',{message:'config error. fill config.json with your api key and secret.'});
-		return;
-	}
-	
-	if(!config.user_id) {
+	if(!utils.checkConfig(config)) {
 		res.redirect('/setup');
-		return;
+		return;		
 	}
 
-	var mode2 = config.auth != null && config.mode != 1 ? true : false;
+	var mode2 = config.auth != null && config.mode != null && utils.requiredAuth(config);
+	console.log('mode2:'+mode2);
 	var flickr_photosets_getList_url = 
 		req.app.get('flickr_api_base_url')+
 		'&user_id='+config.user_id+
@@ -30,20 +34,22 @@ exports.index = function(req, res){
 		(mode2?'&oauth_token='+config.auth.oauth_access_token + '&user_id='+config.auth.results.user_nsid:'');
 	
 	console.log('get photosets list...');
-	// console.log('flickr.photosets.getList:'+flickr_photosets_getList_url);
+	console.log('flickr.photosets.getList:'+flickr_photosets_getList_url);
     request(flickr_photosets_getList_url, {json: true}, function (error, response, body) {
     	var ps = body.photosets.photoset;
     	body.photoset_id = photoset_id;
     	
     	var i = ps.length;
-    	while (i--) {
-    		/**
-    		 * at MODE2 private sets will be visible if has description == ' ' or contains '[public]'
-    		 */
-    		var contains = ps[i].description._content == ' ' || ps[i].description._content.indexOf('[public]') != -1;
-    		if(!(!mode2 || (mode2 && contains))) {
-    			ps.splice(i, 1);
-    		}
+    	if(mode2) {
+	    	while (i--) {
+	    		/**
+	    		 * at MODE2 private sets will be visible if has description == ' ' or contains '[public]'
+	    		 */
+	    		var special_description = ps[i].description._content == ' ' || ps[i].description._content.indexOf('[public]') != -1;
+	    		if(!special_description) {
+	    			ps.splice(i, 1);
+	    		}
+	    	}
     	}
     	
     	ps = ps.sort(function(a,b){
