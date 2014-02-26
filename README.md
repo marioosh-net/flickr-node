@@ -18,8 +18,6 @@ Change directory to project path and get necessary modules for node.js
     cd flickr-node
     npm install
 
-Fill _config.json_ with Your Api Key and secret.
-
 Run node.js app (defalt port is 3000) 
 
     node app.js
@@ -29,8 +27,8 @@ To run on specified port number
     PORT=8080 node app.js
 
 Open [http://localhost:3000](http://localhost:3000) in Your browser. You will get setup page where You
-have to choose gallery mode. Next You will be redirected to authorize app to access Your Flickr account.
-In `mode=2` listed sets need to have `[public]` phrase in description.
+have to choose gallery mode, Your API key etc. Depending on settings You will be redirected to authorize app to access Your Flickr account.
+In `private modes` listed sets need to have `[public]` phrase in description or description = ' ' (space).
 
 Demo on Heroku
 
