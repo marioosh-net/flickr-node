@@ -19,14 +19,15 @@
                         <div>
                             <form method="POST" id="setup">
 
+                                <%if(locals.error){%><div class="validation-error"><%=error%></div><%}%>
                                 <span>Api Key</span><br/>
-                                <input type="text" name="consumer_key" style="width:220px;" value="<%if(locals.consumer_key){%><%=consumer_key%><%}%>"/><br/><br/>
+                                <input type="text" name="consumer_key" style="width:220px;" value="<%if(locals.config.consumer_key){%><%=config.consumer_key%><%}%>"/><br/><br/>
 
                                 <span>Secret</span><br/>
-                                <input type="text" name="consumer_secret" value="<%if(locals.consumer_secret){%><%=consumer_secret%><%}%>"/><br/><br/>
+                                <input type="text" name="consumer_secret" value="<%if(locals.config.consumer_secret){%><%=config.consumer_secret%><%}%>"/><br/><br/>
 
                                 <span>User id</span><br/>
-                                <input type="text" name="user_id" value="<%if(locals.user_id){%><%=user_id%><%}%>"/><br/><br/>
+                                <input id="user_id" type="text" name="user_id" value="<%if(locals.config.user_id){%><%=config.user_id%><%}%>"/><br/><br/>
 
                                 <span>Gallery mode (what will be visible on Your gallery)</span><br/>
 
@@ -37,11 +38,11 @@
                                  * 4 private photos visible to friends & family
                                  * 5 completely private photos                                
                                 -->
-                                <input type="checkbox" name="mode" value="1" <%if(locals.modes[1]){%>checked<%}%>/>&nbsp;public photos<br/>
-                                <input type="checkbox" name="mode" value="2" <%if(locals.modes[2]){%>checked<%}%>/>&nbsp;private photos visible to friends<br/>
-                                <input type="checkbox" name="mode" value="3" <%if(locals.modes[3]){%>checked<%}%>/>&nbsp;private photos visible to family<br/>
-                                <input type="checkbox" name="mode" value="4" <%if(locals.modes[4]){%>checked<%}%>/>&nbsp;private photos visible to friends & family<br/>
-                                <input type="checkbox" name="mode" value="5" <%if(locals.modes[5]){%>checked<%}%>/>&nbsp;completely private photos<br/>
+                                <input type="checkbox" name="mode" value="1" <%if(locals.modes.m1){%>checked<%}%>/>&nbsp;public photos<br/>
+                                <input class="auth" type="checkbox" name="mode" value="2" <%if(locals.modes.m2){%>checked<%}%>/>&nbsp;private photos visible to friends<br/>
+                                <input class="auth" type="checkbox" name="mode" value="3" <%if(locals.modes.m3){%>checked<%}%>/>&nbsp;private photos visible to family<br/>
+                                <input class="auth" type="checkbox" name="mode" value="4" <%if(locals.modes.m4){%>checked<%}%>/>&nbsp;private photos visible to friends & family<br/>
+                                <input class="auth" type="checkbox" name="mode" value="5" <%if(locals.modes.m5){%>checked<%}%>/>&nbsp;completely private photos<br/>
 
                                 <%/*<span>Flickr NSID</span></br>
                                 <input type="text" name="user_id"/><br/>*/%>

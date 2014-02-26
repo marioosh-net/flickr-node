@@ -18,6 +18,19 @@ $(function(){
     $('.openalbum').click(function(){
     	openalbum($(this).attr('url'), $(this).attr('selector'));
     });
+
+    var modeupdate = function(){  
+    	var d = false;  	
+    	$('input.auth').each(function(){
+    		if($(this).attr('checked')) {
+    			d = true;
+    		}
+    	});
+    	$('#user_id').prop('disabled', d);
+    };
+    $('input.auth').change(modeupdate);
+    modeupdate();
+    
     photosEventHandlers(false);
 
 });
@@ -143,7 +156,7 @@ function scrollRefresh() {
 	$('#albums-only').css('height','500px');
 	var e = $('#albums-only').jScrollPane();
 	var api = e.data('jsp');
-	if(!api.getIsScrollableV()) {
+	if(api && !api.getIsScrollableV()) {
 		api.destroy();
 		$('#albums-only').css('height','auto');
 	}	
