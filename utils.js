@@ -2,10 +2,15 @@
  * check config completion (minimum)
  */
 exports.checkConfig = function(config) {
-	if(!config.consumer_key || !config.consumer_secret || config.consumer_key == '' || config.consumer_secret == '') {
+	console.log(config);
+	// if(!config.consumer_key || !config.consumer_secret || config.consumer_key == '' || config.consumer_secret == '') {
+	if(!config.consumer_key || config.consumer_key == '') {
 		return false;
 	}
-	if(!config.user_id || !config.mode) {
+	if(!config.mode || config.mode == '') {
+		return false;
+	}
+	if(!config.user_id && !config.auth) {
 		return false;
 	}
 	return true;

@@ -7,7 +7,7 @@ var request = require('request');
 
 exports.get = function(req, res){
 	var config = req.app.get('config');
-	if(config.auth) {
+	if(utils.checkConfig(config)) {
 		res.send('app configured. route inactive.');
 	} else {
 		modes = {};
@@ -23,10 +23,10 @@ exports.get = function(req, res){
 exports.post = function(req, res){
 	var config = req.app.get('config');
 
-	if(!req.body.mode || !req.body.consumer_key || !req.body.consumer_secret
-		|| req.body.mode=='' || req.body.consumer_key=='' || req.body.consumer_secret==''
+	if(!req.body.mode || !req.body.consumer_key /*|| !req.body.consumer_secret*/
+		|| req.body.mode=='' || req.body.consumer_key=='' /*|| req.body.consumer_secret==''*/
 		) {
-		res.send('configuration error: mode, apiKey and secret required');
+		res.send('configuration error: mode and apiKey required');
 		return;			
 	}
 
@@ -42,6 +42,16 @@ exports.post = function(req, res){
 			res.send('configuration error: userId required');
 			return;			
 		}
+	}
+
+	/**
+	 * check is consumer_secret required
+	 */
+	if(!user_id_required) {
+		if(!req.body.consumer_secret || req.body.consumer_secret=='') {
+			res.send('configuration error: auth required so secret required');
+			return;			
+		}		
 	}
 
 	/**
