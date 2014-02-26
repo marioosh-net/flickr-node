@@ -7,12 +7,8 @@
     </div>
     <div class="clear"></div>
 </div>
-
-
-    <div id="photos">
-    
+<div id="photos">
     <% for(var i=0; i<photoset.photo.length; i++) {%>
-    
         <div id="th<%=i%>" class="thumb_box" style="" >
             <a class="lv" pos="<%=i+1%>" href="<%= photoset.photo[i].url_l %>" thumbnail="<%= photoset.photo[i].url_q %>" data-lightview-group="a<%= photoset.id %>" data-lightview-title='<a href="<%= photoset.photo[i].url_o %>" target="_blank"><%= photoset.photo[i].title %></a> | <a target="_blank" href="http://www.flickr.com/photos/<%=photoset.owner%>/<%=photoset.photo[i].id%>" title="source">source</a>'>
                 <div id="t<%=i%>" class="thumb" style="background-image: url('/images/ajax-loader7.gif'); background-position: 50% 50%; "></div>
@@ -22,7 +18,6 @@
             <a href="<%= photoset.photo[i].url_l %>" title='Open in new window' target="_blank"><img class="full" src="/images/n3.png" alt="full size"></a>
             <span style="display: none;">vision:night=052,</span>
         </div>
-
     <% } %>    
     <div class="clear"></div>
-    </div>
+</div>

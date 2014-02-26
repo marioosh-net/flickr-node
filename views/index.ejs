@@ -5,7 +5,6 @@
         <link rel="stylesheet" media="screen" href="/stylesheets/main.css">
         <script src="/javascripts/jquery-1.7.1.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="/javascripts/main.js"></script>
-        
         <!-- lightview -->
         <script src="/javascripts/swfobject.js" type="text/javascript"></script>
         <!--[if lt IE 9]>
@@ -14,86 +13,62 @@
         <script type="text/javascript" src="/javascripts/spinners/spinners.min.js"></script>
         <script type="text/javascript" src="/javascripts/lightview/lightview.js"></script>
         <link rel="stylesheet" type="text/css" href="/stylesheets/lightview/lightview.css" />
-
         <!-- scrolling photosets-listonly -->                
         <link rel="stylesheet" type="text/css" href="/stylesheets/jquery.jscrollpane.css" />
         <script type="text/javascript" src="/javascripts/jquery.mousewheel.js"></script>
         <script type="text/javascript" src="/javascripts/jquery.jscrollpane.min.js"></script>
-        
     </head>
-    <body id="body">
+<body id="body">
     <div id="msg"></div>
     <div id="wrapper">  
         <div id="main">
-            
             <div id="content">      
                 <div class="fixedwidth">
                     <div class="left leftfixed">
-                        
-    
-    
-        
-    <div id="albums">
-        <div class="frame-albums">
-        
-            <div class="setsheader">
-            
-                <div id="searchbox">
-                    <div class="left">
-                        <input type="text" name="search" id="search" value="" >&nbsp;
-                        <a id="bsearch" href="#" >Search</a>
-                        |
-                        <a id="ball" href="#" >Show all</a>
-                        
+                        <div id="albums">
+                            <div class="frame-albums">
+                                <div class="setsheader">
+                                    <div id="searchbox">
+                                        <div class="left">
+                                            <input type="text" name="search" id="search" value="" >&nbsp;
+                                            <a id="bsearch" href="#" >Search</a>
+                                            |
+                                            <a id="ball" href="#" >Show all</a>
+                                        </div>
+                                        <div class="right">
+                                            <img src="/images/ajax-loader6.gif" id="search-progress" style="display: none;">
+                                        </div><div class="clear"></div>
+                                    </div>
+                                    <div id="searches" style="display:none;">
+                                    </div>
+                                </div>
+                               <div id="albums-only">
+                               <!-- ALBUMS -->
+                               <% include photosets-listonly.ejs %>
+                               </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="right">
-                        <img src="/images/ajax-loader6.gif" id="search-progress" style="display: none;">
-                    </div><div class="clear"></div>
-                </div>
-                <div id="searches" style="display:none;">
-                </div>
-            
-            </div>
-        
-           <div id="albums-only">
-           
-           <!-- ALBUMS -->
-           <% include photosets-listonly.ejs %>
-           
-           </div>
-        </div>
-    </div>
-
-
-                    </div>
-                    <div class="right rightfixed">
-                                        
+                    <div class="right rightfixed">                                        
                         <div id="header">
-                          <div class="left" style="padding-top: 10px;">
-                              <a href="/" class="logoref"><img src="/images/logo.png"></a>
-                          </div>
-                        
-                        
-                        <div class="right" style="margin-top: 10px;">
-                            <%/*
-                            <div class="right">&nbsp;<a href="/?lang=pl">PL</a>|<a href="/?lang=en">EN</a></div>
-                        
-                            <span id="form" style="display: none;"><form id="f" method="post" action="/login" style="display: inline;">Login / Hasło<br/><input name="login" type="login" value=""/>
-                            <input name="pass" type="password" value=""/><input type="submit" value="" class="hiddensubmit"/>&nbsp;<a href="#" onclick="$('#f').submit();">OK</a>|<a href="#" onclick="$('#form').hide(); $('#loginb').show();">Anuluj</a><input type="submit" value="Login" style="display: none;"/></form></span>
-                                <a id="loginb" href="#" onclick="$('#form').toggle(); $(this).toggle();">Zaloguj</a>
-                        
-                            */%>
-                            <%/* if(session.auth) { %>
-                                <a href="/logout">Logout</a>
-                            <% } else { %>
-                                <a href="/auth">Login</a>    
-                            <% } */%>
+                            <div class="left" style="padding-top: 10px;">
+                                <a href="/" class="logoref"><img src="/images/logo.png"></a>
+                            </div>
+                            <div class="right" style="margin-top: 10px;">
+                                <%/*
+                                <div class="right">&nbsp;<a href="/?lang=pl">PL</a>|<a href="/?lang=en">EN</a></div>
+                                <span id="form" style="display: none;"><form id="f" method="post" action="/login" style="display: inline;">Login / Hasło<br/><input name="login" type="login" value=""/>
+                                <input name="pass" type="password" value=""/><input type="submit" value="" class="hiddensubmit"/>&nbsp;<a href="#" onclick="$('#f').submit();">OK</a>|<a href="#" onclick="$('#form').hide(); $('#loginb').show();">Anuluj</a><input type="submit" value="Login" style="display: none;"/></form></span>
+                                    <a id="loginb" href="#" onclick="$('#form').toggle(); $(this).toggle();">Zaloguj</a>
+                                */%>
+                                <%/* if(session.auth) { %>
+                                    <a href="/logout">Logout</a>
+                                <% } else { %>
+                                    <a href="/auth">Login</a>    
+                                <% } */%>
+                            </div>
+                            <div class="clear"></div>
                         </div>
-                        
-                          
-                          <div class="clear"></div>
-                        </div>
-                        
                         <div id="right">
                             <% if(photoset_id) { %>
                                 <% include photos.ejs %>
@@ -102,10 +77,8 @@
                                     <div id="photos">
                                         <div class="covers">
                                             <div class="thumbs">
-                            
                                                 <!-- COVERS -->
                                                 <% include photosets.ejs %>
-                                                
                                             </div>
                                             <div style="clear: both;"></div>
                                         </div>
@@ -113,21 +86,17 @@
                                 </div>
                             <% } %>
                         </div>                  
-                        
                         <div id="footer-right">
                             Inspired by <a href="http://minishowcase.net">minishowcase</a>. Powered by <a href="http://nodejs.org/"><img style="vertical-align: top;" src="/images/node.png"></a>&nbsp;|&nbsp;<a href="http://marioosh.net">marioosh.net</a>
                             <br>Images presented on this site may not be used without permission
                             <div class="left"></div>
                             <div class="right"></div>
                             <div class="clear"></div>
-                        </div>
-                        
+                        </div>                        
                         <div id="exif-container">
                            <div id="exif"></div>
                         </div>
-                        
-                        <div id="debug" style="display: none;"></div>                       
-                                                        
+                        <div id="debug" style="display: none;"></div>                                                        
                     </div>
                 </div>
             </div>
@@ -135,4 +104,3 @@
     </div>
 </body>
 </html>
-

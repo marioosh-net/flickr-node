@@ -47,7 +47,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 		flickr_photosets_getPhotos_url += '&oauth_token='+req.app.get('config').auth.oauth_access_token + '&user_id='+req.app.get('config').auth.results.user_nsid;
 	}
 
-	// console.log('flickr.photosets.getPhotos:'+flickr_photosets_getPhotos_url);
+	console.log('flickr.photosets.getPhotos:'+flickr_photosets_getPhotos_url);
 	console.log('get photos for \''+photoset_id+'\', filter:'+filter+'...');
 	request(flickr_photosets_getPhotos_url, {json:true}, function(error, response, body){
 		body.seturl = 'http://www.flickr.com/photos/'+req.app.get('config').user_id+'/sets/'+photoset_id;
@@ -55,31 +55,25 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 	});
 }
 
+/**
+ * merge results from getFiltered calls
+ */
 exports.getPhotos = function(req, photoset_id, callback) {
-	var photoset_id = req.params.id;
-
-	var func = [];
-	func[0] = function(callback1){
-		/**
-		 * MODE 1
-		 * get public photos only
-		 */		
+	var func = [function filter1(callback){
+		/* MODE 1 - get public photos only */
 		getFiltered(req, photoset_id, 1, function(data){
-			callback1(null, data);
+			callback(null, data);
 		});
-	};
+	}];
 	if(req.app.get('config').mode != 1 && req.app.get('config').auth != null) {
-    	/**
-    	 * MODE 2
-    	 * get private photos visible to friends & family (second request)
-    	 */			
-		func[1] = function(callback1){
+    	/* MODE 2 - get private photos visible to friends & family (second request) */
+		func[1] = function filter2(callback){
 			getFiltered(req, photoset_id, 4, function(data){
-				callback1(null, data);
+				callback(null, data);
 			});
 		};
 	}
-	async.parallel(func, function(err, results){
+	async.parallel(func, function merge(err, results){
 		var data = null;
 		for(var i=0;i<results.length;i++) {
 			if(i > 0) {
@@ -95,11 +89,11 @@ exports.getPhotos = function(req, photoset_id, callback) {
 exports.list = function(req, res){
 	exports.getPhotos(req, req.params.id, function(data) {
 		if(req.query.play != null) {
-            // superslides
+            /* superslides */
 			res.render('play', data);
         } else {
     		if(req.query.play2 != null) {
-                // supersized
+                /* supersized */
 		    	res.render('play2', data);
     		} else {
 	    		res.render('photos', data);
