@@ -22,3 +22,10 @@ exports.checkConfig = function(config) {
 exports.requiredAuth = function(config) {
 	return config.mode != null && config.mode.some(function(val){return val != 1;});
 }
+
+/**
+ * produce api base url
+ */
+exports.getBaseUrl = function(https, consumer_key) {
+	return (https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+consumer_key;
+}
