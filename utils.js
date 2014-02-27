@@ -10,7 +10,6 @@ exports.config = function() {
  * check config completion (minimum)
  */
 exports.checkConfig = function(config) {
-	console.log(config);
 	// if(!config.consumer_key || !config.consumer_secret || config.consumer_key == '' || config.consumer_secret == '') {
 	if(!config.consumer_key || config.consumer_key == '') {
 		return false;
@@ -33,7 +32,9 @@ exports.requiredAuth = function(config) {
 
 /**
  * produce api base url
+ * if config not defined take config from config.json
  */
-exports.getBaseUrl = function(https, consumer_key) {
-	return (https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+consumer_key;
+exports.getBaseUrl = function(config) {
+	var config1 = typeof config !== 'undefined' ? config : exports.config();
+	return (config1.https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config1.consumer_key;
 }

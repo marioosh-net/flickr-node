@@ -6,16 +6,6 @@ var setup = require('./routes/setup');
 var exif = require('./routes/exif');
 var http = require('http');
 var path = require('path');
-var utils = require('./utils.js');
-
-/**
- * check flickr configuration
- */
-var config = utils.config(); // flickr config
-/*if(!config.user_id || !config.consumer_key) {
-	console.log('Configuration failed. Check configuration (config.js)');
-	process.exit(1);
-}*/
 
 /**
  * express app
@@ -23,11 +13,6 @@ var config = utils.config(); // flickr config
 var app = express();
 
 // all environments
-if(config.consumer_key) {
-	app.set('flickr_api_base_url', (config.use_https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config.consumer_key);
-}
-app.set('config', config);
-app.set('photos', photos);
 app.set('http', http);
 app.set('port', process.env.PORT || 3000);
 app.set('views', __dirname + '/views');

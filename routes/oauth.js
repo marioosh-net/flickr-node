@@ -13,14 +13,15 @@ exports.auth = function(req, res){
 		res.send('app configured. route inactive.');
 	} else {
 		
-		var oa = req.app.get('oa') ? req.app.get('oa') : new OAuth.OAuth("https://www.flickr.com/services/oauth/request_token",
-				"https://www.flickr.com/services/oauth/access_token",
-				config.consumer_key,
-				config.consumer_secret,
-				"1.0",
-				req.headers.referer.substring(0,req.headers.referer.indexOf('/setup'))+'/auth?callback=1',
-				"HMAC-SHA1");
-		req.app.set('oa',oa);
+		var oa = new OAuth.OAuth(
+			"https://www.flickr.com/services/oauth/request_token",
+			"https://www.flickr.com/services/oauth/access_token",
+			config.consumer_key,
+			config.consumer_secret,
+			"1.0",
+			req.headers.referer.substring(0,req.headers.referer.indexOf('/setup'))+'/auth?callback=1',
+			"HMAC-SHA1"
+		);
 		
 		if(req.param('callback')) {
 			var oauth_token = req.param('oauth_token');

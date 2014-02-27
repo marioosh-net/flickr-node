@@ -85,7 +85,7 @@ exports.post = function(req, res){
 		/**
 		 * check user_id exists
 		 */
-		var url = utils.getBaseUrl(false,req.body.consumer_key)+'&method=flickr.people.getInfo&user_id='+req.body.user_id;
+		var url = utils.getBaseUrl({https:false, consumer_key: req.body.consumer_key})+'&method=flickr.people.getInfo&user_id='+req.body.user_id;
 		request(url, {json: true}, function (error, response, body){
 			if(body.stat == 'fail') {
 				res.send('configuration error: '+body.message);

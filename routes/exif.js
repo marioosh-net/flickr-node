@@ -3,12 +3,13 @@
  */
 var async = require('async');
 var request = require('request');
+var utils = require('../utils.js');
 
 exports.list = function(req, res){
 	var photo_id = req.params.id;
 	var photo_secret = req.params.secret;
 
-    request(req.app.get('flickr_api_base_url')+'&photo_id='+photo_id+'&secret='+photo_secret+'&method=flickr.photos.getExif', function (error, response, body) {
+    request(utils.getBaseUrl()+'&photo_id='+photo_id+'&secret='+photo_secret+'&method=flickr.photos.getExif', function (error, response, body) {
     	var json = JSON.parse(body);
     	var exifs = json.photo.exif;
     	
