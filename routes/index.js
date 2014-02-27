@@ -16,7 +16,7 @@ var request = require('request');
 var utils = require('../utils.js');
 
 exports.index = function(req, res){
-	var config = req.app.get('config');
+	var config = utils.config();
 	var photoset_id = req.params.id;
 	
 	if(!utils.checkConfig(config)) {
@@ -24,7 +24,7 @@ exports.index = function(req, res){
 		return;		
 	}
 
-	var mode2 = config.auth != null && config.mode != null && utils.requiredAuth(config);
+	var mode2 = config.auth != null && utils.requiredAuth(config);
 	console.log('mode2:'+mode2);
 	var flickr_photosets_getList_url = 
 		req.app.get('flickr_api_base_url')+

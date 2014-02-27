@@ -6,11 +6,12 @@ var setup = require('./routes/setup');
 var exif = require('./routes/exif');
 var http = require('http');
 var path = require('path');
+var utils = require('./utils.js');
 
 /**
  * check flickr configuration
  */
-var config = require('./config.json'); // flickr config
+var config = utils.config(); // flickr config
 /*if(!config.user_id || !config.consumer_key) {
 	console.log('Configuration failed. Check configuration (config.js)');
 	process.exit(1);

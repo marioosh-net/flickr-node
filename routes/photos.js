@@ -19,7 +19,7 @@ var utils = require('../utils.js');
 var getFiltered = function(req, photoset_id, filter, callback) {
 	var flickr_photosets_getPhotos_url = req.app.get('flickr_api_base_url')+'&photoset_id='+photoset_id+'&method=flickr.photosets.getPhotos'+'&extras=tags,url_l,url_o,url_q,o_dims'+'&privacy_filter='+filter;
 	
-	var config = req.app.get('config');
+	var config = utils.config();
 	/**
 	 * full authorized access
 	 * url with '&oauth_token=...'
@@ -61,7 +61,7 @@ var getFiltered = function(req, photoset_id, filter, callback) {
  * merge results from getFiltered calls
  */
 exports.getPhotos = function(req, photoset_id, callback) {
-	var config = req.app.get('config');
+	var config = utils.config();
 
 	var func = [];
 	config.mode.forEach(function(mode){

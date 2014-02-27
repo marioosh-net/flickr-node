@@ -3,12 +3,13 @@
  */
 
 var OAuth = require('oauth');
+var utils = require('../utils.js');
 
 exports.auth = function(req, res){
 	
-	var config = require('../config.json');
+	var config = utils.config();
 	
-	if(req.app.get('config').auth) {
+	if(config.auth) {
 		res.send('app configured. route inactive.');
 	} else {
 		
@@ -31,15 +32,12 @@ exports.auth = function(req, res){
 					'oauth_access_token': oauth_access_token,
 					'oauth_access_token_secret': oauth_access_token_secret
 				}
-				req.app.get('config').auth = secured;
-				
-				var config = req.app.get('config');
-				config.auth = secured;
+				config.auth = secured;				
 				config.user_id = secured.results.user_nsid;
 				
 				var fs = require('fs');
 				fs.writeFile('./config.json', JSON.stringify(config, null, 1), function(err){
-					req.app.set('config', require('../config.json'));
+					req.app.set('config', utils.config());
 					req.app.set('flickr_api_base_url', (config.use_https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config.consumer_key);
 					res.redirect('/');
 				});

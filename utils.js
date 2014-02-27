@@ -1,4 +1,12 @@
 /**
+ * load config and return as JSON
+ */
+exports.config = function() {
+	var fs = require('fs');
+	var file = __dirname + '/config.json';
+	return JSON.parse(fs.readFileSync(file, 'utf8'));
+}
+/**
  * check config completion (minimum)
  */
 exports.checkConfig = function(config) {

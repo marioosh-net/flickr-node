@@ -6,7 +6,7 @@ var utils = require('../utils.js');
 var request = require('request');
 
 exports.get = function(req, res){
-	var config = req.app.get('config');
+	var config = utils.config();
 	if(utils.checkConfig(config)) {
 		res.send('app configured. route inactive.');
 	} else {
@@ -21,7 +21,7 @@ exports.get = function(req, res){
 }
 
 exports.post = function(req, res){
-	var config = req.app.get('config');
+	var config = utils.config();
 
 	if(!req.body.mode || !req.body.consumer_key /*|| !req.body.consumer_secret*/
 		|| req.body.mode=='' || req.body.consumer_key=='' /*|| req.body.consumer_secret==''*/
@@ -70,7 +70,7 @@ exports.post = function(req, res){
 		 */
 		var fs = require('fs');
 		fs.writeFile('./config.json', JSON.stringify(config, null, 1), function(err){
-			req.app.set('config', require('../config.json')); 
+			req.app.set('config', utils.config()); 
 		});
 		
 		if(utils.requiredAuth(config)) {
