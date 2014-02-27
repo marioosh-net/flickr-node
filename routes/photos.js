@@ -8,6 +8,8 @@ var request = require('request');
 var utils = require('../utils.js');
 
 /**
+ * get photos by call method flickr.photosets.getPhotos using privacy_filter
+ *
  * filter:
  * 1 public photos
  * 2 private photos visible to friends
@@ -25,32 +27,10 @@ var getFiltered = function(req, photoset_id, filter, callback) {
 	 * url with '&oauth_token=...'
 	 */
 	if(config.auth != null && utils.requiredAuth(config)) {
-		/**
-		 * 1 solution
-		 * request using oa.get()
-		var oa = req.app.get('oa');
-		oa.get(flickr_photosets_getPhotos_url, config.auth.oauth_access_token, config.auth.oauth_access_token_secret, function (err, data, response){
-		  console.log('==>Access the protected resource with access token');
-		  console.log(JSON.stringify(JSON.parse(data), null, 1));
-		  ...
-		});
-		*/
-
-		/**
-		 * 2 solution
-		 * build signed url using oa.signUrl()
-		var oa = req.app.get('oa'); 
-		flickr_photosets_getPhotos_url = oa.signUrl(flickr_photosets_getPhotos_url, config.auth.oauth_access_token, config.auth.oauth_access_token_secret, 'GET');
-		*/
-		
-		/**
-		 * 3 solution (simplest, works too)
-		 */
 		flickr_photosets_getPhotos_url += '&oauth_token='+config.auth.oauth_access_token + '&user_id='+config.auth.results.user_nsid;
 	}
 
 	console.log('get photos for \''+photoset_id+'\', filter:'+filter+'...');
-	console.log('flickr.photosets.getPhotos:'+flickr_photosets_getPhotos_url);
 	request(flickr_photosets_getPhotos_url, {json:true}, function(error, response, body){
 		body.seturl = 'http://www.flickr.com/photos/'+config.user_id+'/sets/'+photoset_id;
 		callback(body);
@@ -86,6 +66,9 @@ exports.getPhotos = function(req, photoset_id, callback) {
 	});
 };
 
+/**
+ * render photos on main page or in slideshow
+ */
 exports.list = function(req, res){
 	exports.getPhotos(req, req.params.id, function(data) {
 		if(req.query.play != null) {
