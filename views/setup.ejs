@@ -20,11 +20,11 @@
                             <form method="POST" id="setup">
 
                                 <%if(locals.error){%><div class="validation-error"><%=error%></div><%}%>
-                                <span>Api Key</span><br/>
-                                <input type="text" name="consumer_key" style="width:220px;" value="<%if(locals.config.consumer_key){%><%=config.consumer_key%><%}%>"/><br/><br/>
+                                <span>Api Key <a href="http://www.flickr.com/services/api/keys/">[get one]</a></span><br/>
+                                <input type="text" name="consumer_key" style="width:220px;" value="<%if(locals.config.consumer_key){%><%=config.consumer_key%><%}%>"/><br/>
 
                                 <span>Secret</span><br/>
-                                <input type="text" name="consumer_secret" value="<%if(locals.config.consumer_secret){%><%=config.consumer_secret%><%}%>"/><br/><br/>
+                                <input type="text" name="consumer_secret" value="<%if(locals.config.consumer_secret){%><%=config.consumer_secret%><%}%>"/><br/>
 
                                 <span>User id</span><br/>
                                 <input id="user_id" type="text" name="user_id" value="<%if(locals.config.user_id){%><%=config.user_id%><%}%>"/><br/><br/>
