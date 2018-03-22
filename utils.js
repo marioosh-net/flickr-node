@@ -36,5 +36,6 @@ exports.requiredAuth = function(config) {
  */
 exports.getBaseUrl = function(config) {
 	var config1 = typeof config !== 'undefined' ? config : exports.config();
-	return (config1.https ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config1.consumer_key;
+	/* always https (required now ?) */
+	return (true ? 'https://api.flickr.com/services/rest' : 'http://api.flickr.com/services/rest')+'?format=json&nojsoncallback=1&oauth_consumer_key='+config1.consumer_key;
 }
