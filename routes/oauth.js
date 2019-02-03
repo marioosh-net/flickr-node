@@ -12,14 +12,16 @@ exports.auth = function(req, res){
 	if(config.auth) {
 		res.send('app configured. route inactive.');
 	} else {
-		
+		var referer = req.headers.referer;
+		var redirect = typeof referer != 'undefined' ? referer.substring(0, referer.indexOf('/setup'))+'/auth?callback=1' : null;
+
 		var oa = new OAuth.OAuth(
 			"https://www.flickr.com/services/oauth/request_token",
 			"https://www.flickr.com/services/oauth/access_token",
 			config.consumer_key,
 			config.consumer_secret,
 			"1.0",
-			req.headers.referer.substring(0,req.headers.referer.indexOf('/setup'))+'/auth?callback=1',
+			redirect,
 			"HMAC-SHA1"
 		);
 		
